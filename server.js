@@ -36,4 +36,4 @@ app.get('/sample', function (req, res) {
 // START THE SERVER
 // ==============================================
 app.listen(port);
-console.log('Magic happens on port ' + port);
+console.log('Mopsi snoops on port ' + port);

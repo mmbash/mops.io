@@ -1,0 +1,38 @@
+<div ng-controller="AppDetailsController">
+    {{apps[0].id}}
+</div>
+
+
+<table class="table movietable">
+    <tr>
+        <td>
+            <h3>Details for {{details.apps[0].id}}</h3>
+        </td>
+        <td></td>
+    </tr>
+    <tr>
+        <td>CMD</td>
+        <td>{{details.apps[0].cmd}}</td>
+    </tr>
+    <tr>
+        <td>Image</td>
+        <td>{{details.apps[0].container.docker.image}}</td>
+    </tr>
+    <tr>
+        <td>Version</td>
+        <td>{{details.apps[0].version}}</td>
+    </tr>
+    <tr>
+        <td>Ports</td>
+        <td>{{details.apps[0].ports}}</td>
+    </tr>
+
+    <tr>
+        <td>whatever</td>
+        <td>{{details.app.tasks[0].host}}</td>
+    </tr>
+
+</table>
+<div>
+    <a class="btn btn-primary" ui-sref="editMovie({id:movie.id})">Edit</a>
+</div>

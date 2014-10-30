@@ -1,0 +1,12 @@
+{
+  "name": "mopsi.io",
+  "description": "Ya man",
+  "version": "0.0.1",
+  "private": true,
+  "dependencies": {
+    "express": "4.x",
+    "body-parser": "^1.0.2",
+    "jade": "~0.31.2"
+  }
+}
+

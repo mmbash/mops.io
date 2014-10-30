@@ -1,0 +1,90 @@
+{
+    "app": {
+        "args": null, 
+        "backoffFactor": 1.15, 
+        "backoffSeconds": 1, 
+        "cmd": "python toggle.py $PORT0", 
+        "constraints": [], 
+        "container": null, 
+        "cpus": 0.2, 
+        "dependencies": [], 
+        "deployments": [], 
+        "disk": 0.0, 
+        "env": {}, 
+        "executor": "", 
+        "healthChecks": [
+            {
+                "command": null, 
+                "gracePeriodSeconds": 5, 
+                "intervalSeconds": 10, 
+                "maxConsecutiveFailures": 3, 
+                "path": "/health", 
+                "portIndex": 0, 
+                "protocol": "HTTP", 
+                "timeoutSeconds": 10
+            }
+        ], 
+        "id": "/toggle", 
+        "instances": 2, 
+        "mem": 32.0, 
+        "ports": [
+            10000
+        ], 
+        "requirePorts": false, 
+        "storeUrls": [], 
+        "tasks": [
+            {
+                "appId": "/toggle", 
+                "healthCheckResults": [
+                    {
+                        "alive": true, 
+                        "consecutiveFailures": 0, 
+                        "firstSuccess": "2014-09-13T00:20:28.101Z", 
+                        "lastFailure": null, 
+                        "lastSuccess": "2014-09-13T00:25:07.506Z", 
+                        "taskId": "toggle.802df2ae-3ad4-11e4-a400-56847afe9799"
+                    }
+                ], 
+                "host": "10.141.141.10", 
+                "id": "toggle.802df2ae-3ad4-11e4-a400-56847afe9799", 
+                "ports": [
+                    31045
+                ], 
+                "stagedAt": "2014-09-12T23:28:28.594Z", 
+                "startedAt": "2014-09-13T00:24:46.959Z", 
+                "version": "2014-09-12T23:28:21.737Z"
+            }, 
+            {
+                "appId": "/toggle", 
+                "healthCheckResults": [
+                    {
+                        "alive": true, 
+                        "consecutiveFailures": 0, 
+                        "firstSuccess": "2014-09-13T00:20:28.101Z", 
+                        "lastFailure": null, 
+                        "lastSuccess": "2014-09-13T00:25:07.508Z", 
+                        "taskId": "toggle.7c99814d-3ad4-11e4-a400-56847afe9799"
+                    }
+                ], 
+                "host": "10.141.141.10", 
+                "id": "toggle.7c99814d-3ad4-11e4-a400-56847afe9799", 
+                "ports": [
+                    31234
+                ], 
+                "stagedAt": "2014-09-12T23:28:22.587Z", 
+                "startedAt": "2014-09-13T00:24:46.965Z", 
+                "version": "2014-09-12T23:28:21.737Z"
+            }
+        ], 
+        "tasksRunning": 2, 
+        "tasksStaged": 0, 
+        "upgradeStrategy": {
+            "minimumHealthCapacity": 1.0
+        }, 
+        "uris": [
+            "http://downloads.mesosphere.com/misc/toggle.tgz"
+        ], 
+        "user": null, 
+        "version": "2014-09-12T23:28:21.737Z"
+    }
+}

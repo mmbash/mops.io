@@ -1,0 +1,16 @@
+<table class="table movietable">
+    <tr>
+        <td>
+            <h3>All Tags for image 1 {{movie.name}} 2 {{name}} 3 {{movies.results.name}}</h3>
+        </td>
+        <td></td>
+    </tr>
+    <tr ng-repeat="(tag, id) in tags | filter:search">
+        <td>{{tag}}</td>
+        <td>{{id}}</td>
+        <td>
+            <a class="btn btn-primary" ui-sref="viewDetails({tag:tag})">Details</a>
+            <a class="btn btn-danger" ng-click="deleteMovie(movie)">Delete</a>
+        </td>
+    </tr>
+</table>

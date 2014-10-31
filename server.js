@@ -9,7 +9,7 @@ var port = process.env.PORT_RUNTIME || process.env.PORT || 3000;
 var request = require('request');
 
 app.get('/api/repos', function (req, res) {
-  request('http://localhost:5000/v1/search', function (error, response, body) {
+  request('http://10.0.2.15:5000/v1/search', function (error, response, body) {
     if (!error && response.statusCode == 200) {
       // from within the callback, write data to response, essentially returning it.
       parsedBody = JSON.parse(body);

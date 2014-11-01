@@ -7,19 +7,21 @@ var express = require('express');
 var app = express();
 var port = process.env.PORT_RUNTIME || process.env.PORT || 3000;
 var request = require('request');
+var config = require('./config.js');
 
 app.get('/api/repos', function (req, res) {
-  request('http://10.0.2.15:5000/v1/search', function (error, response, body) {
-    if (!error && response.statusCode == 200) {
-      // from within the callback, write data to response, essentially returning it.
-      parsedBody = JSON.parse(body);
-      console.log(typeof (parsedbody))
-      console.log(body)
-      res.send(parsedBody);
-    }
-  })
+	request('http://10.0.2.15:5000/v1/search', function (error, response, body) {
+		if (!error && response.statusCode == 200) {
+			// from within the callback, write data to response, essentially returning it.
+			parsedBody = JSON.parse(body);
+			console.log(typeof (parsedbody))
+			console.log(body)
+			res.send(parsedBody);
+		}
+	})
 });
 
+<<<<<<< HEAD
 app.get('/v1/tags', function (req, res) {
   request('http://10.0.2.15:5000/v1/repositories/:name/tags', function (error, response, body) {
     if (!error && response.statusCode == 200) {
@@ -32,20 +34,68 @@ app.get('/v1/tags', function (req, res) {
   })
 });
 
+=======
+// list all running apps
+app.get(config.LISTAPPS,function getApps(req,res) {
+	console.log('Get running apps');
+	req.pipe(request.get(config.MARATHONHOST + config.MARATHONLISTAPPS, function (error,response,body){
+    if (error){
+      console.error('Connection error: ' + error.code);
+    }
+  })).pipe(res);
+});
+>>>>>>> origin/master
 
-app.use(express.static(__dirname + '/public'));
-
-// ROUTES
-// ==============================================
-
-// sample route with a route the way we're used to seeing it
-app.get('/sample', function (req, res) {
-  res.send('this is a sample!');
+// get infos of a running app
+app.get(config.GETINFOSAPP, function getAppInfo(req,res) {
+	console.log('Get info of app: '+req.params.id);
+	req.pipe(request.get(config.MARATHONHOST + config.MARATHONGETINFOSAPP + req.params.id, function (error,response,body){
+		if (error){
+    	console.error('Connection error: ' + error.code);
+    }
+	})).pipe(res);
 });
 
-// we'll create our routes here
+// stop a app
+app.delete(config.DELETEAPP, function deleteApps(req,res) {
+	console.log ('Delete an app');
+	req.pipe(request.del(config.MARATHONHOST + config.MARATHONDELETEAPP + req.params.id, function (error,response,body){
+    if (error){
+      console.error('Connection error: ' + error.code);
+    }
+  })).pipe(res);
+});
+
+// start a app
+app.post(config.DEPLOYAPP, function deployApps(req,res) {
+	console.log ('Start an app');
+	req.pipe(request.post(config.MARATHONHOST + config.MARATHONDEPLOYAPP, function (error,response,body){
+    if (error){
+      console.error('Connection error: ' + error.code);
+    }
+  })).pipe(res);
+});
+
+// change params of a app
+app.put(config.CHANGEAPP,function changeApps(req,res) {
+	console.log ('Change an app: ' + req.params.id);
+	req.pipe(request.put(config.MARATHONHOST + config.MARATHONCHANGEAPP + req.params.id, function (error,response,body){
+    if (error){
+      console.error('Connection error: ' + error.code);
+    }
+  })).pipe(res);
+});
+
+// catch uncaught exception
+process.on('uncaughtException', function (err) {
+	console.error('uncaughtException: ' + err.message);
+	console.error(err.stack);
+	process.exit(1);
+});
+
+app.use(express.static(__dirname + '/public'));
 
 // START THE SERVER
 // ==============================================
 app.listen(port);
-console.log('Mopsi snoops on port ' + port);
+console.log('Mopsi snoops aka mopsi brain on port ' + port);

@@ -33,7 +33,6 @@ app.get('/v1/tags', function (req, res) {
   })
 });
 
-=== === =
 // list all running apps
 app.get(config.LISTAPPS, function getApps(req, res) {
   console.log('Get running apps');

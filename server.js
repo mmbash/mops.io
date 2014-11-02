@@ -22,7 +22,7 @@ app.get('/api/repos', function (req, res) {
 });
 
 app.get('/v1/tags', function (req, res) {
-  request('http://10.0.2.15:5000/v1/repositories/:name/tags', function (error, response, body) {
+  request('http://10.0.2.15:5000/v1/repositories/:name/tags/req.params.id', function (error, response, body) {
     if (!error && response.statusCode == 200) {
       // from within the callback, write data to response, essentially returning it.
       parsedBody = JSON.parse(body);

@@ -31,7 +31,7 @@ angular.module('movieApp.services', [])
 .factory('ReposTags', function ($resource) {
   return $resource('/v1/tags', {
     //return $resource('../tags.json', {
-    tags: '@_tags'
+    name: '@_name'
   }, {
     query: {
       method: "GET",

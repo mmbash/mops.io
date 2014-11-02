@@ -28,7 +28,7 @@ angular.module('movieApp.services', [])
   });
 })
 
-.factory('RepoTags', function ($resource) {
+.factory('ReposSTags', function ($resource) {
   return $resource('/v1/tags', {
     //return $resource('../tags.json', {
     tags: '@_tags'

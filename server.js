@@ -47,7 +47,7 @@ app.get('/v1/repos', function getTags(req, res) {
 });
 
 // TAGS
-app.get('/v1/tags', function getTags(req, res) {
+/*app.get('/v1/tags', function getTags(req, res) {
   console.log('Get tags');
   console.log('[' + new Date() + '] ', req);
   req.pipe(request.get('', function (error, response, body) {
@@ -56,7 +56,7 @@ app.get('/v1/tags', function getTags(req, res) {
       console.error('Connection error: ' + error.code);
     }
   })).pipe(res);
-});
+});*/
 
 
 

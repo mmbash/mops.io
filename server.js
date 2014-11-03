@@ -50,7 +50,7 @@ app.get('/v1/repos', function getTags(req, res) {
 app.get('/v1/tags', function getTags(req, res) {
   console.log('Get tags');
   console.log('[' + new Date() + '] ', req);
-  req.pipe(request.get('config.REGISTRYHOST' + 'config.REGREPOSTAGS1' + name 'config.REGREPOSTAGS2', function (error, response, body) {
+  req.pipe(request.get('config.REGISTRYHOST' + 'config.REGREPOSTAGS1' + name + 'config.REGREPOSTAGS2', function (error, response, body) {
     console.log('[' + new Date() + '] ', req.url);
     if (error) {
       console.error('Connection error: ' + error.code);

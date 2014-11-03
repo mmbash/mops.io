@@ -36,7 +36,7 @@ app.get('/api/repos', function (req, res) {
 // TAGSd
 app.get('/v1/tags', function getApps(req, res) {
   console.log('Get tags');
-  console.log('[' + new Date() + '] ', req.path);
+  console.log('[' + new Date() + '] ', req.request);
   req.pipe(request.get(config.REGISTRYHOST + config.REGREPOSTAGS, function (error, response, body) {
     if (error) {
       console.error('Connection error: ' + error.code);

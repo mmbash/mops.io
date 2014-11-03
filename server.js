@@ -38,7 +38,7 @@ app.get('/api/repos', function (req, res) {
 app.get('/v1/repos', function getTags(req, res) {
   console.log('Get repos');
   console.log('[' + new Date() + '] ', req);
-  req.pipe(request.get(config.REGISTRYHOST + config.REGLISTREPOS, function (error, response, body) {
+  req.pipe(request.get('http://192.168.1.188:5000/v1/search', function (error, response, body) {
     console.log('[' + new Date() + '] ', req);
     if (error) {
       console.error('Connection error: ' + error.code);

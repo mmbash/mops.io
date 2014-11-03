@@ -50,8 +50,8 @@ app.get('/v1/repos', function getTags(req, res) {
 app.get('/v1/tags', function getTags(req, res) {
   console.log('Get tags');
   console.log('[' + new Date() + '] ', req);
-  req.pipe(request.get('http://192.168.1.188:5000/v1/repositories/:name/tags/', function (error, response, body) {
-    console.log('[' + new Date() + '] ', req);
+  req.pipe(request.get(config.REGISTRYHOST + config.REGREPOSTAGS, function (error, response, body) {
+    console.log('[' + new Date() + '] ', req.url);
     if (error) {
       console.error('Connection error: ' + error.code);
     }

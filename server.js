@@ -33,7 +33,7 @@ app.get('/api/repos', function (req, res) {
   })
 });*/
 
-// TAGS
+// TAGSd
 app.get('/v1/tags', function getApps(req, res) {
   console.log('Get tags');
   console.log('[' + new Date() + '] ', req.path);

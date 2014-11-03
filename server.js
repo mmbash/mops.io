@@ -10,7 +10,7 @@ var request = require('request');
 var config = require('./config.js');
 
 app.get('/api/repos', function (req, res) {
-  request('http://192.168.1.180:5000/v1/search', function (error, response, body) {
+  request('http://192.168.1.188:5000/v1/search', function (error, response, body) {
     if (!error && response.statusCode == 200) {
       // from within the callback, write data to response, essentially returning it.
       parsedBody = JSON.parse(body);

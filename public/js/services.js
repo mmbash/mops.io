@@ -17,9 +17,8 @@ angular.module('movieApp.services', [])
 })
 
 .factory('Repos', function ($resource) {
-  return $resource('/v1/repos', {
-    //return $resource('../app-details.json', {
-    apps: '@_apps'
+  return $resource('/v1/repos/:name', {
+    name: '@_name'
   }, {
     query: {
       method: "GET",
@@ -30,7 +29,6 @@ angular.module('movieApp.services', [])
 
 .factory('ReposTags', function ($resource) {
   return $resource('/v1/tags', {
-    //return $resource('../tags.json', {
     name: '@_name'
   }, {
     query: {
@@ -40,7 +38,29 @@ angular.module('movieApp.services', [])
   });
 })
 
-// AAAAAAAAAAAAAAAAAAAAAAAAAAAAALLLLLLLLLLLLLLLLLLLT
+.factory('ImageLayer', function ($resource) {
+  return $resource('/v1/layer', {
+    id: '@id'
+  }, {
+    query: {
+      method: "GET",
+      isArray: true
+    }
+  });
+})
+
+.factory('DeleteRepo', function ($resource) {
+  return $resource('/v1/repo/delete', {
+    name: '@name'
+  }, {
+    query: {
+      method: "DELETE",
+      isArray: true
+    }
+  });
+})
+
+// AAAAAAAAAAAAAAAAAAAAAAAAAAAAALLLLLLLLLLLLLLLLLLT
 
 
 .factory('App', function ($resource) {

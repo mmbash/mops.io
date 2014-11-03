@@ -1,19 +1,17 @@
-<!--<a ui-sref="newMovie" class="btn-primary btn-lg nodecoration">Add New Image</a>-->
 <table class="table movietable">
-    <tr>
-        <td>
-            <h3>All Repos</h3>
-        </td>
-        <td></td>
-    </tr>
-    <tr ng-repeat="repo in repos.results | filter:search">
-        <td>{{repo.name}}</td>
-        <td>{{repo.nix}}</td>
-        <td>
-            <a class="btn btn-primary" ui-sref="viewMovie({name:movie.name})">View</a>
-            <a class="btn btn-primary" ui-sref="viewReposTags({name:repo.name})">Tags</a>
-            <a class="btn btn-danger" ng-click="deleteMovie(movie)">Deploy</a>
-            <a class="btn btn-danger" ng-click="deleteMovie(movie)">Delete</a>
-        </td>
-    </tr>
+  <tr>
+    <td>
+      <h3>All Repos</h3>
+    </td>
+    <td></td>
+  </tr>
+  <tr ng-repeat="repo in repos.results | filter:search">
+    <td>{{repo.name}}</td>
+    <td>{{repo.nix}}</td>
+    <td>
+      <a class="btn btn-primary" ui-sref="viewReposTags({name:repo.name})">Tags</a>
+      <a class="btn btn-danger" ng-click="deleteMovie(repo)">Deploy</a>
+      <a class="btn btn-danger" ng-click="DeleteRepoController(repo.name)">Delete</a>
+    </td>
+  </tr>
 </table>

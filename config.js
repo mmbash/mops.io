@@ -3,12 +3,11 @@
 // author: marc.zimmermann@mmbash.de and mike.michel@mmbash.de
 
 // Docker Registry
-exports.REGISTRYHOST = 'http://192.168.1.188/:5000';
+exports.REGISTRYHOST = 'http://192.168.1.188:5000/v1';
 
-exports.REGLISTREPOS = '/v1/search/:name';
-exports.REGREPOSTAGS1 = '/v1/repositories/:name/';
-exports.REGREPOSTAGS2 = '/tags/';
-exports.REGDELETEAPP = '/v1/apps/:id';
+exports.REGLISTREPOS = '/search';
+exports.REGREPOSTAGS = '/repositories/';
+exports.REG_IMAGE_LAYER = '/images/';
 exports.REGCHANGEAPP = '/v1/apps/:id';
 exports.REGGETINFOSAPP = '/v1/apps/:id';
 

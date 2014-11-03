@@ -1,5 +1,4 @@
 // server.js
-
 // BASE SETUP
 // ==============================================
 
@@ -9,36 +8,11 @@ var port = process.env.PORT_RUNTIME || process.env.PORT || 3000;
 var request = require('request');
 var config = require('./config.js');
 
-app.get('/api/repos', function (req, res) {
-  request('http://192.168.1.188:5000/v1/search', function (error, response, body) {
-    if (!error && response.statusCode == 200) {
-      // from within the callback, write data to response, essentially returning it.
-      parsedBody = JSON.parse(body);
-      console.log(typeof (parsedbody))
-      console.log(body)
-      res.send(parsedBody);
-    }
-  })
-});
-
-/*app.get('/v1/tags', function (req, res) {
-  request('http://10.0.2.15:5000/v1/repositories/:name/tags/req.params.id', function (error, response, body) {
-    if (!error && response.statusCode == 200) {
-      // from within the callback, write data to response, essentially returning it.
-      parsedBody = JSON.parse(body);
-      console.log(typeof (parsedbody))
-      console.log(body)
-      res.send(parsedBody);
-    }
-  })
-});*/
-
-
 // REPOS
-app.get('/v1/repos', function getTags(req, res) {
+app.get('/v1/repos', function (req, res) {
   console.log('Get repos');
   console.log('[' + new Date() + '] ', req);
-  req.pipe(request.get('config.REGISTRYHOST' + 'config.REGLISTREPOS', function (error, response, body) {
+  req.pipe(request.get(config.REGISTRYHOST + config.REGLISTREPOS, function (error, response, body) {
     console.log('[' + new Date() + '] ', req);
     if (error) {
       console.error('Connection error: ' + error.code);
@@ -47,16 +21,26 @@ app.get('/v1/repos', function getTags(req, res) {
 });
 
 // TAGS
-/*app.get('/v1/tags', function getTags(req, res) {
+app.get('/v1/tags', function getTags(req, res) {
   console.log('Get tags');
-  console.log('[' + new Date() + '] ', req);
-  req.pipe(request.get('', function (error, response, body) {
+  req.pipe(request.get(config.REGISTRYHOST + config.REGREPOSTAGS + req.param("name") + '/tags', function (error, response, body) {
     console.log('[' + new Date() + '] ', req.url);
     if (error) {
       console.error('Connection error: ' + error.code);
     }
   })).pipe(res);
-});*/
+});
+
+// LAYER
+app.get('/v1/layer', function getLayer(req, res) {
+  console.log('Get layer');
+  req.pipe(request.get(config.REGISTRYHOST + config.REG_IMAGE_LAYER + req.param("id") + '/json', function (error, response, body) {
+    console.log('[' + new Date() + '] ', req.url);
+    if (error) {
+      console.error('Connection error: ' + error.code);
+    }
+  })).pipe(res);
+});
 
 
 

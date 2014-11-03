@@ -4,7 +4,8 @@
 
 // Docker Registry
 exports.REGISTRYHOST = 'http://192.168.1.188/:5000';
-exports.REGLISTREPOS = '/v1/repos';
+
+exports.REGLISTREPOS = '/v1/search/:name';
 exports.REGREPOSTAGS = ' /v1/repositories/:name/tags/';
 exports.REGDELETEAPP = '/v1/apps/:id';
 exports.REGCHANGEAPP = '/v1/apps/:id';

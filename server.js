@@ -33,7 +33,20 @@ app.get('/api/repos', function (req, res) {
   })
 });*/
 
-// TAGSd
+
+// REPOS
+app.get('/v1/repos', function getTags(req, res) {
+  console.log('Get repos');
+  console.log('[' + new Date() + '] ', req);
+  req.pipe(request.get(config.REGISTRYHOST + config.REGLISTREPOS, function (error, response, body) {
+    console.log('[' + new Date() + '] ', req);
+    if (error) {
+      console.error('Connection error: ' + error.code);
+    }
+  })).pipe(res);
+});
+
+// TAGS
 app.get('/v1/tags', function getTags(req, res) {
   console.log('Get tags');
   console.log('[' + new Date() + '] ', req);

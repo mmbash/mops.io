@@ -17,7 +17,7 @@ angular.module('movieApp.services', [])
 })
 
 .factory('Repos', function ($resource) {
-  return $resource('/api/repos', {
+  return $resource('/v1/repos', {
     //return $resource('../app-details.json', {
     apps: '@_apps'
   }, {

@@ -1,6 +1,16 @@
 // Class to define the urls for the rest interface
 // Version v1
-// author: marc.zimmermann@mmbash.de
+// author: marc.zimmermann@mmbash.de and mike.michel@mmbash.de
+
+// Docker Registry
+exports.REGISTRYHOST = 'http://10.0.2.15:5000';
+exports.REGLISTREPOS = '/v1/repos';
+exports.REGREPOSTAGS = ' /v1/repositories/:name/tags/';
+exports.REGDELETEAPP = '/v1/apps/:id';
+exports.REGCHANGEAPP = '/v1/apps/:id';
+exports.REGGETINFOSAPP = '/v1/apps/:id';
+
+exports.ROUTEREGTAGS = '/v1/tags';
 
 // Deployment url
 exports.LISTAPPS = '/v1/apps';

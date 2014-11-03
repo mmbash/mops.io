@@ -21,7 +21,7 @@ app.get('/api/repos', function (req, res) {
   })
 });
 
-app.get('/v1/tags', function (req, res) {
+/*app.get('/v1/tags', function (req, res) {
   request('http://10.0.2.15:5000/v1/repositories/:name/tags/req.params.id', function (error, response, body) {
     if (!error && response.statusCode == 200) {
       // from within the callback, write data to response, essentially returning it.
@@ -31,7 +31,19 @@ app.get('/v1/tags', function (req, res) {
       res.send(parsedBody);
     }
   })
+});*/
+
+// TAGS
+app.get(config.ROUTEREGTAGS, function getApps(req, res) {
+  console.log('Get tags');
+  req.pipe(request.get(config.REGISTRYHOST + config.MARATHONLISTAPPS, function (error, response, body) {
+    if (error) {
+      console.error('Connection error: ' + error.code);
+    }
+  })).pipe(res);
 });
+
+
 
 // list all running apps
 app.get(config.LISTAPPS, function getApps(req, res) {

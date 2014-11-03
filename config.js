@@ -3,7 +3,7 @@
 // author: marc.zimmermann@mmbash.de and mike.michel@mmbash.de
 
 // Docker Registry
-exports.REGISTRYHOST = 'http://10.0.2.15:5000';
+exports.REGISTRYHOST = 'http://192.168.1.188/:5000';
 exports.REGLISTREPOS = '/v1/repos';
 exports.REGREPOSTAGS = ' /v1/repositories/:name/tags/';
 exports.REGDELETEAPP = '/v1/apps/:id';

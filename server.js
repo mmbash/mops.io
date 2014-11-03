@@ -34,7 +34,7 @@ app.get('/api/repos', function (req, res) {
 });*/
 
 // TAGS
-app.get(config.ROUTEREGTAGS, function getApps(req, res) {
+app.get('/v1/tags', function getApps(req, res) {
   console.log('Get tags');
   console.log('[' + new Date() + '] ', req.path);
   req.pipe(request.get(config.REGISTRYHOST + config.REGREPOSTAGS, function (error, response, body) {

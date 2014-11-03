@@ -47,7 +47,7 @@ app.get('/v1/repos', function getTags(req, res) {
 });
 
 // TAGS
-app.get('/v1/tags', function getTags(req, res, name) {
+app.get('/v1/tags', function getTags(req, res) {
   console.log('Get tags');
   console.log('[' + new Date() + '] ', req);
   req.pipe(request.get('config.REGISTRYHOST' + 'config.REGREPOSTAGS1' + name + 'config.REGREPOSTAGS2', function (error, response, body) {

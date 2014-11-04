@@ -1,21 +1,5 @@
 angular.module('movieApp.services', [])
 
-.factory('Movie', function ($resource) {
-  return $resource('http://192.168.1.188:5000/v1/search/:name', {
-    name: '@_name'
-  }, {
-    update: {
-      method: 'PUT',
-      isArray: false
-    },
-    query: {
-      method: "GET",
-      // headers:{'Content-Type':'application/x-www-form-urlencoded; charset=UTF-8'},
-      isArray: false
-    }
-  });
-})
-
 .factory('Repos', function ($resource) {
   return $resource('/v1/repos/:name', {
     name: '@_name'
@@ -27,7 +11,19 @@ angular.module('movieApp.services', [])
   });
 })
 
+.factory('ReposDelete', function ($resource) {
+  return $resource('/v1/deleterepos/:name', {
+    name: '@_name'
+  }, {
+    query: {
+      method: "GET",
+      isArray: false
+    }
+  });
+})
+
 .factory('ReposTags', function ($resource) {
+  console.log('tags ' + tags);
   return $resource('/v1/tags', {
     name: '@_name'
   }, {

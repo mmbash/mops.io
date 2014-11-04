@@ -10,8 +10,8 @@
     <td>{{repo.nix}}</td>
     <td>
       <a class="btn btn-primary" ui-sref="viewReposTags({name:repo.name})">Tags</a>
-      <a class="btn btn-danger" ng-click="deleteMovie(repo)">Deploy</a>
-      <a class="btn btn-danger" ng-click="DeleteRepoController(repo.name)">Delete</a>
+      <a class="btn btn-danger" ng-click="$log.info(repo.name)">Deploy</a>
+      <a class="btn btn-danger" ng-click="deleteRepo(repo.name)">Delete</a>
     </td>
   </tr>
 </table>

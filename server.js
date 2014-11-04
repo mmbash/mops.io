@@ -7,12 +7,24 @@ var app = express();
 var port = process.env.PORT_RUNTIME || process.env.PORT || 3000;
 var request = require('request');
 var config = require('./config.js');
+var cors = require('cors');
+
+app.use(cors());
 
 // REPOS
 app.get('/v1/repos', function (req, res) {
   console.log('Get repos');
-  console.log('[' + new Date() + '] ', req);
   req.pipe(request.get(config.REGISTRYHOST + config.REGLISTREPOS, function (error, response, body) {
+    //    console.log('[' + new Date() + '] ', req);
+    if (error) {
+      console.error('Connection error: ' + error.code);
+    }
+  })).pipe(res);
+});
+
+// DELETE REPOS
+app.get('/v1/deleterepos/:name', function (req, res, next) {
+  req.pipe(request.del(config.REGISTRYHOST + config.REGREPOSTAGS + req.param("name") + '/', function (error, response, body) {
     console.log('[' + new Date() + '] ', req);
     if (error) {
       console.error('Connection error: ' + error.code);

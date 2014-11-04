@@ -13,10 +13,18 @@ angular.module('movieApp.controllers', [])
   }
 })
 
-.controller('ReposController', function ($scope, $stateParams, Repos) {
+.controller('ReposController', function ($scope, $stateParams, popupService, $window, Repos, ReposDelete) {
   $scope.repos = Repos.get({
     id: $stateParams.id
   });
+  $scope.deleteRepo = function (name) {
+    if (popupService.showPopup('Digga, really kill ' + name + '?')) {
+      ReposDelete.get({
+        name: name
+      });
+      $window.location.href = '';
+    }
+  }
 })
 
 .controller('ReposTagsController', function ($scope, $stateParams, ReposTags) {
@@ -31,19 +39,6 @@ angular.module('movieApp.controllers', [])
   $scope.details = ImageLayer.get({
     id: $stateParams.id
   });
-})
-
-.controller('DeleteRepoController', function ($scope, $state, $stateParams, popupService, $window, Repo) {
-  $scope.repo = DeleteRepo.get({
-    id: $stateParams.id
-  });
-  $scope.deleteRepo = function (repo) {
-    if (popupService.showPopup('Digga, really kill this?')) {
-      repo.$delete(function () {
-        $window.location.href = '';
-      });
-    }
-  }
 })
 
 .controller('AppDetailsController', function ($scope, $stateParams, AppDetails) {

@@ -4,6 +4,7 @@
 
 // Docker Registry
 exports.REGISTRYHOST = 'http://192.168.1.188:5000/v1';
+//exports.REGISTRYHOST = 'http://10.141.141.10:5000/v1';
 
 exports.REGLISTREPOS = '/search';
 exports.REGREPOSTAGS = '/repositories/';

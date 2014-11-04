@@ -23,7 +23,6 @@ angular.module('movieApp.services', [])
 })
 
 .factory('ReposTags', function ($resource) {
-  console.log('tags ' + tags);
   return $resource('/v1/tags', {
     name: '@_name'
   }, {

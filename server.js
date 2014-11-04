@@ -7,9 +7,7 @@ var app = express();
 var port = process.env.PORT_RUNTIME || process.env.PORT || 3000;
 var request = require('request');
 var config = require('./config.js');
-var cors = require('cors');
 
-app.use(cors());
 
 // REPOS
 app.get('/v1/repos', function (req, res) {
@@ -118,4 +116,4 @@ app.use(express.static(__dirname + '/public'));
 // START THE SERVER
 // ==============================================
 app.listen(port);
-console.log('Mopsi snoops aka mopsi brain on port ' + port);
+console.log('Mopsi  aka mopsi brain snoops on port ' + port);

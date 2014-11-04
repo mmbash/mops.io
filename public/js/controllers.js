@@ -1,24 +1,11 @@
 angular.module('movieApp.controllers', [])
 
-.controller('MovieListController', function ($scope, $state, popupService, $window, Movie) {
-
-  $scope.movies = Movie.query();
-
-  $scope.deleteMovie = function (movie) {
-    if (popupService.showPopup('Really delete this?')) {
-      movie.$delete(function () {
-        $window.location.href = '';
-      });
-    }
-  }
-})
-
 .controller('ReposController', function ($scope, $stateParams, popupService, $window, Repos, ReposDelete) {
   $scope.repos = Repos.get({
     id: $stateParams.id
   });
   $scope.deleteRepo = function (name) {
-    if (popupService.showPopup('Digga, really kill ' + name + '?')) {
+    if (popupService.showPopup('Really delete ' + name + '?')) {
       ReposDelete.get({
         name: name
       });
@@ -39,6 +26,20 @@ angular.module('movieApp.controllers', [])
   $scope.details = ImageLayer.get({
     id: $stateParams.id
   });
+})
+
+.controller('AppsController', function ($scope, $stateParams, popupService, $window, Apps, AppKill) {
+  $scope.apps = Apps.get({
+    id: $stateParams.id
+  });
+  $scope.appKill = function (name) {
+    if (popupService.showPopup('Really kill ' + name + '?')) {
+      AppKill.get({
+        name: name
+      });
+      $window.location.href = '';
+    }
+  }
 })
 
 .controller('AppDetailsController', function ($scope, $stateParams, AppDetails) {

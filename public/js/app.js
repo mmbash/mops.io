@@ -45,7 +45,7 @@ angular.module('movieApp').config(function ($stateProvider, $httpProvider) {
     }).state('apps', {
       url: '/apps',
       templateUrl: 'partials/apps.html',
-      controller: 'AppListController'
+      controller: 'AppsController'
     });
 }).run(function ($state) {
   $state.go('viewRepos'); //später auf repos ändern

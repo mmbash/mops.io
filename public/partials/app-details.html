@@ -1,38 +1,42 @@
-<div ng-controller="AppDetailsController">
-    {{apps[0].id}}
-</div>
+<!--<div ng-controller="AppDetailsController">
+  {{apps[0].id}}
+</div>-->
 
 
 <table class="table movietable">
-    <tr>
-        <td>
-            <h3>Details for {{details.apps[0].id}}</h3>
-        </td>
-        <td></td>
-    </tr>
-    <tr>
-        <td>CMD</td>
-        <td>{{details.apps[0].cmd}}</td>
-    </tr>
-    <tr>
-        <td>Image</td>
-        <td>{{details.apps[0].container.docker.image}}</td>
-    </tr>
-    <tr>
-        <td>Version</td>
-        <td>{{details.apps[0].version}}</td>
-    </tr>
-    <tr>
-        <td>Ports</td>
-        <td>{{details.apps[0].ports}}</td>
-    </tr>
+  <tr>
+    <td>
+      <h3>Details for {{details.app.id}}</h3>
+    </td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>CMD</td>
+    <td>{{details.app.cmd}}</td>
+  </tr>
+  <tr>
+    <td>Image</td>
+    <td>{{details.app.container.docker.image}}</td>
+  </tr>
+  <tr>
+    <td>Version</td>
+    <td>{{details.app.version}}</td>
+  </tr>
+  <tr>
+    <td>Ports</td>
+    <td>{{details.app.ports}}</td>
+  </tr>
 
-    <tr>
-        <td>whatever</td>
-        <td>{{details.app.tasks[0].host}}</td>
-    </tr>
+  <tr>
+    <td>whatever</td>
+    <td>{{details.app.tasks[0].host}}</td>
+  </tr>
+  <tr>
+    <td>whatever</td>
+    <td>{{details.app.tasks[0].id}}</td>
+  </tr>
 
 </table>
 <div>
-    <a class="btn btn-primary" ui-sref="editMovie({id:movie.id})">Edit</a>
+  <a class="btn btn-primary" ui-sref="editMovie({id:movie.id})">Edit</a>
 </div>

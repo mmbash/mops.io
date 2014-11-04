@@ -1,12 +1,12 @@
 {
   "name": "mopsi.io",
   "description": "Ya man",
-  "version": "0.0.1",
+  "version": "0.0.4",
   "private": true,
   "dependencies": {
     "express": "4.x",
     "body-parser": "^1.0.2",
     "jade": "~0.31.2",
-    "cors": "2.5.x"
+    "request": "2.47.x"
   }
 }

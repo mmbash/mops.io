@@ -55,25 +55,9 @@ angular.module('movieApp.services', [])
   });
 })
 
-// AAAAAAAAAAAAAAAAAAAAAAAAAAAAALLLLLLLLLLLLLLLLLLT
-
-
-.factory('App', function ($resource) {
-  return $resource('http://cors-proxy.mops.io/192.168.1.180:8080/v2/apps/:id', {
-    // return $resource('../apps.json', {
-    id: '@_id'
-  }, {
-    query: {
-      method: 'GET',
-      isArray: true
-    }
-  });
-})
-
-.factory('AppDetails', function ($resource) {
-  return $resource('http://cors-proxy.mops.io/192.168.1.180:8080/v2/apps/:apps', {
-    //return $resource('../app-details.json', {
-    apps: '@_apps'
+.factory('Apps', function ($resource) {
+  return $resource('/v1/apps', {
+    id: '@id'
   }, {
     query: {
       method: "GET",
@@ -81,17 +65,42 @@ angular.module('movieApp.services', [])
     }
   });
 })
-  .factory('Image', function ($resource) {
-    return $resource('http://cors-proxy.mops.io/192.168.1.188:5000/v1/repositories/:name/tags', {
-      //return $resource('../tags.json', {
-      tags: '@_tags'
-    }, {
-      query: {
-        method: "GET",
-        isArray: true
-      }
-    });
-  })
+
+.factory('AppDetails', function ($resource) {
+  return $resource('/v1/apps/:id', {
+    id: '@id'
+  }, {
+    query: {
+      method: "GET",
+      isArray: true
+    }
+  });
+})
+
+.factory('AppKill', function ($resource) {
+  return $resource('/v1/apps', {
+    id: '@id'
+  }, {
+    query: {
+      method: "GET",
+      isArray: true
+    }
+  });
+})
+
+// AAAAAAAAAAAAAAAAAAAAAAAAAAAAALLLLLLLLLLLLLLLLLLT
+
+.factory('Image', function ($resource) {
+  return $resource('http://cors-proxy.mops.io/192.168.1.188:5000/v1/repositories/:name/tags', {
+    //return $resource('../tags.json', {
+    tags: '@_tags'
+  }, {
+    query: {
+      method: "GET",
+      isArray: true
+    }
+  });
+})
   .factory('Details', function ($resource) {
     //        return $resource('http://192.168.1.188:5000/v1/repositories/:name/tags', {
     return $resource('../details.json', {

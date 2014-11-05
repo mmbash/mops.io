@@ -1,6 +1,6 @@
 angular.module('movieApp.controllers', [])
 
-.controller('ReposController', function ($scope, $stateParams, popupService, $window, Repos, ReposDelete) {
+.controller('ReposController', function ($scope, $stateParams, popupService, $window, $modal, $log, Repos, ReposDelete) {
   $scope.repos = Repos.get({
     id: $stateParams.id
   });
@@ -12,9 +12,57 @@ angular.module('movieApp.controllers', [])
       $window.location.href = '';
     }
   }
+  ////
+  $scope.items = ['item1', 'item2', 'item3'];
+
+  $scope.open = function (size, name) {
+
+    var modalInstance = $modal.open({
+      templateUrl: 'myModalContent.html',
+      controller: 'ModalInstanceCtrl',
+      size: size,
+      resolve: {
+        items: function () {
+          return $scope.items;
+        },
+        name: function () {
+          console.log('Size: ' + size + ' und Repo: ' + name);
+          return name;
+        }
+      }
+    });
+
+    modalInstance.result.then(function (selectedItem) {
+      $scope.selected = selectedItem;
+    }, function () {
+      $log.info('Modal dismissed at: ' + new Date());
+    });
+  }
+
+  ///
+})
+
+.controller('ModalInstanceCtrl', function ($scope, $modalInstance, items, name) {
+
+  $scope.items = items;
+  $scope.reponame = name;
+
+  $scope.selected = {
+    item: $scope.items[0]
+  };
+
+  $scope.ok = function () {
+    $modalInstance.close($scope.selected.item);
+  };
+
+  $scope.cancel = function () {
+    $modalInstance.dismiss('cancel');
+  };
 })
 
 .controller('ReposTagsController', function ($scope, $stateParams, ReposTags) {
+  $scope.reponame = $stateParams.name;
+  console.log('Tags ' + $stateParams.name);
 
   $scope.tags = ReposTags.get({
     name: $stateParams.name
@@ -48,12 +96,18 @@ angular.module('movieApp.controllers', [])
     id: $stateParams.id
   });
 
+}).controller('AppDeployController', function ($scope, $stateParams, AppDeploy) {
+
+  $scope.deploy = AppDeploy.get({
+    id: $stateParams.id
+  });
+
 })
 
 .controller('MovieViewController', function ($scope, $stateParams, Movie) { //bei neuen controllern und bezeichnungen auf ($scope, $stateParams, ---->Movie<---) achten!
 
   $scope.movie = Movie.get({ //ruft .factory Movie in services.js auf
-    id: $stateParams.id // übergibt id, damit der service mit der var "id" arbeiten kann
+    id: $stateParams.id // übergibt id, damit der service mit der var "id " arbeiten kann
   });
 })
 

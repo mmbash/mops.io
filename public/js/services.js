@@ -86,6 +86,15 @@ angular.module('movieApp.services', [])
       isArray: true
     }
   });
+}).factory('AppDeploy', function ($resource) {
+  return $resource('/v1/apps', {
+    id: '@id'
+  }, {
+    query: {
+      method: "GET",
+      isArray: true
+    }
+  });
 })
 
 // AAAAAAAAAAAAAAAAAAAAAAAAAAAAALLLLLLLLLLLLLLLLLLT

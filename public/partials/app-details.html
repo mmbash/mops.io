@@ -1,9 +1,4 @@
-<!--<div ng-controller="AppDetailsController">
-  {{apps[0].id}}
-</div>-->
-
-
-<table class="table movietable">
+<table class="table mopsitable">
   <tr>
     <td>
       <h3>Details for {{details.app.id}}</h3>
@@ -26,17 +21,16 @@
     <td>Ports</td>
     <td>{{details.app.ports}}</td>
   </tr>
-
   <tr>
-    <td>whatever</td>
+    <td>Host</td>
     <td>{{details.app.tasks[0].host}}</td>
   </tr>
   <tr>
-    <td>whatever</td>
-    <td>{{details.app.tasks[0].id}}</td>
+    <td>Type</td>
+    <td>{{details.app.container.type}}</td>
   </tr>
-
+  <tr>
+    <td>Volumes</td>
+    <td>{{details.app.container.volumes}}</td>
+  </tr>
 </table>
-<div>
-  <a class="btn btn-primary" ui-sref="editMovie({id:movie.id})">Edit</a>
-</div>

@@ -1,9 +1,11 @@
-<table class="table movietable">
+<table class="table mopsitable">
   <tr>
     <td>
-      <h3>All Tags for Image 1 {{movie.name}} 2 {{name}} 3 {{movies.results.name}} {{req.param("name")}}</h3>
+      <h3>All Tags for Image  </h3>
     </td>
-    <td></td>
+    <td>
+      <h3>{{reponame}}</h3>
+    </td>
   </tr>
   <tr ng-repeat="(tag, id) in tags | filter:search">
     <td>{{tag}}</td>

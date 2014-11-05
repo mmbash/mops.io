@@ -1,4 +1,4 @@
-<table class="table movietable">
+<table class="table mopsitable">
   <tr>
     <td>
       <h3>All Repos</h3>
@@ -10,8 +10,12 @@
     <td>{{repo.nix}}</td>
     <td>
       <a class="btn btn-primary" ui-sref="viewReposTags({name:repo.name})">Tags</a>
-      <a class="btn btn-danger" ng-click="$log.info(repo.name)">Deploy</a>
+      <!--      <a class="btn btn-info" ui-sref="viewAppDeploy({name:repo.name})">Deploy</a>-->
+      <a class="btn btn-info" ng-click="open('sm',repo.name)">Deploy</a>
       <a class="btn btn-danger" ng-click="deleteRepo(repo.name)">Delete</a>
+
     </td>
   </tr>
 </table>
+
+<div ng-include="'js/modal.js'"></div>

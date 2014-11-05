@@ -1,4 +1,4 @@
-angular.module('movieApp', ['ui.router', 'ngResource', 'movieApp.controllers', 'movieApp.services', 'datatables']);
+angular.module('movieApp', ['ui.bootstrap', 'ui.router', 'ngResource', 'movieApp.controllers', 'movieApp.services', 'datatables']);
 
 angular.module('movieApp').config(function ($stateProvider, $httpProvider) {
   $stateProvider
@@ -22,10 +22,10 @@ angular.module('movieApp').config(function ($stateProvider, $httpProvider) {
       url: '/image/:name/tags',
       templateUrl: 'partials/image-tags.html',
       controller: 'ImageTagsController'
-    }).state('viewDetails', {
+    }).state('viewAppDeploy', {
       url: '/image/:name/:tag/details',
-      templateUrl: 'partials/image-details.html',
-      controller: 'ImageDetailsController'
+      templateUrl: 'partials/app-details.html',
+      controller: 'AppDeployController'
     }).state('movies', {
       url: '/movies',
       templateUrl: 'partials/movies.html',
@@ -48,5 +48,5 @@ angular.module('movieApp').config(function ($stateProvider, $httpProvider) {
       controller: 'AppsController'
     });
 }).run(function ($state) {
-  $state.go('viewRepos'); //später auf repos ändern
+  $state.go('viewRepos'); //Standard Startview
 });

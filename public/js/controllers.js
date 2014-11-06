@@ -97,8 +97,8 @@ angular.module('movieApp.controllers', [])
   });
 })
 
-.controller('AppDeployController', function ($scope, $state, $stateParams, AppDeploy, config) {
-  console.log('registryhos ' + config.REGISTRYHOST);
+.controller('AppDeployController', function ($scope, $state, $stateParams, AppDeploy) {
+  //  console.log('registryhos ' + config.REGISTRYHOST);
   $scope.form = {
     reponame: $stateParams.reponame,
     tag: $stateParams.tag

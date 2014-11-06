@@ -84,9 +84,9 @@ app.delete(config.DELETEAPP, function deleteApps(req, res) {
   })).pipe(res);
 });
 
-// start a app
+// deploy a app
 app.post(config.DEPLOYAPP, function deployApps(req, res) {
-  console.log('Start an app');
+  console.log('Deploy an app');
   req.pipe(request.post(config.MARATHONHOST + config.MARATHONDEPLOYAPP, function (error, response, body) {
     if (error) {
       console.error('Connection error: ' + error.code);

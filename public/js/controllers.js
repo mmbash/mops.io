@@ -95,21 +95,33 @@ angular.module('movieApp.controllers', [])
   $scope.details = AppDetails.get({
     id: $stateParams.id
   });
-
-}).controller('AppDeployController', function ($scope, $stateParams, AppDeploy) {
-
-  $scope.deploy = AppDeploy.get({
-    id: $stateParams.id
-  });
-
 })
 
-.controller('MovieViewController', function ($scope, $stateParams, Movie) { //bei neuen controllern und bezeichnungen auf ($scope, $stateParams, ---->Movie<---) achten!
+.controller('AppDeployController', function ($scope, $state, $stateParams, AppDeploy, config) {
+  console.log('registryhos ' + config.REGISTRYHOST);
+  $scope.form = {
+    reponame: $stateParams.reponame,
+    tag: $stateParams.tag
+  };
 
-  $scope.movie = Movie.get({ //ruft .factory Movie in services.js auf
-    id: $stateParams.id // übergibt id, damit der service mit der var "id " arbeiten kann
-  });
+  $scope.app = new AppDeploy();
+
+  $scope.appDeploy = function () {
+
+    image: $stateParams.reponame
+
+    $scope.app.$save(function () {
+      console.log('image ' + $stateParams.reponame);
+      $state.go('apps'); // ruft /apps in app.js auf?
+    });
+  }
 })
+  .controller('MovieViewController', function ($scope, $stateParams, Movie) { //bei neuen controllern und bezeichnungen auf ($scope, $stateParams, ---->Movie<---) achten!
+
+    $scope.movie = Movie.get({ //ruft .factory Movie in services.js auf
+      id: $stateParams.id // übergibt id, damit der service mit der var "id " arbeiten kann
+    });
+  })
 
 .controller('ImageTagsController', function ($scope, $stateParams, Image) {
 

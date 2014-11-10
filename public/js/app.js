@@ -6,6 +6,10 @@ angular.module('movieApp').config(function ($stateProvider, $httpProvider) {
       url: '/repos/:name', //afaik muss url eindeutig sein
       templateUrl: 'partials/repos.html',
       controller: 'ReposController'
+    }).state('Settings', {
+      url: '/settings',
+      templateUrl: 'partials/settings.html',
+      controller: 'SettingsController'
     }).state('viewReposTags', {
       url: '/repos/:name/tags',
       templateUrl: 'partials/image-tags.html',

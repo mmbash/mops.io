@@ -1,5 +1,15 @@
 angular.module('movieApp.services', [])
 
+
+
+.factory('Settings', function ($resource) {
+  return $resource('/settings/:host/:ip', {
+    registry: '@registry',
+    marathon: '@marathon'
+
+  });
+})
+
 .factory('Repos', function ($resource) {
   return $resource('/v1/repos/:name', {
     name: '@_name'

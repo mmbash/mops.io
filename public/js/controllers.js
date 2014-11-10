@@ -75,6 +75,20 @@ angular.module('movieApp.controllers', [])
     id: $stateParams.id
   });
 })
+  .controller('SettingsController', function ($scope, $stateParams, Settings) {
+
+    $scope.settings = new Settings(); //this object now has a $save() method
+    $scope.updateSettings = function () {
+      $scope.settings.$save(function () {
+        $state.go('repos');
+      });
+    };
+    $scope.loadSettings = function () {
+      $scope.settings = Settings.get();
+    };
+    $scope.loadSettings();
+  })
+
 
 .controller('AppsController', function ($scope, $stateParams, popupService, $window, Apps, AppKill) {
   $scope.apps = Apps.get({
@@ -97,8 +111,8 @@ angular.module('movieApp.controllers', [])
   });
 })
 
-.controller('AppDeployController', function ($scope, $state, $stateParams, AppDeploy) {
-  //  console.log('registryhos ' + config.REGISTRYHOST);
+.controller('AppDeployController', function ($scope, $state, $stateParams, AppDeploy, Settings) {
+  $scope.settings = Settings.get();
   $scope.form = {
     reponame: $stateParams.reponame,
     tag: $stateParams.tag
@@ -125,7 +139,7 @@ angular.module('movieApp.controllers', [])
 
 .controller('ImageTagsController', function ($scope, $stateParams, Image) {
 
-  $scope.tags = Image.get({ //ruft .factory Image in services.js auf
+  $scope.tags = Image.get({
     name: $stateParams.name
   });
 })
@@ -135,7 +149,6 @@ angular.module('movieApp.controllers', [])
   $scope.details = Details.get({
     details: $stateParams.details
   });
-
 })
 
 .controller('MovieCreateController', function ($scope, $state, $stateParams, Movie) {
@@ -147,7 +160,6 @@ angular.module('movieApp.controllers', [])
       $state.go('movies');
     });
   }
-
 })
 
 .controller('MovieEditController', function ($scope, $state, $stateParams, Movie) {

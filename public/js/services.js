@@ -1,5 +1,15 @@
 angular.module('movieApp.services', [])
 
+
+
+.factory('Settings', function ($resource) {
+  return $resource('/settings/:host/:ip', {
+    registry: '@registry',
+    marathon: '@marathon'
+
+  });
+})
+
 .factory('Repos', function ($resource) {
   return $resource('/v1/repos/:name', {
     name: '@_name'
@@ -88,7 +98,7 @@ angular.module('movieApp.services', [])
   });
 }).factory('AppDeploy', function ($resource) {
   return $resource('/v1/apps', {
-    id: '@id'
+    tag: 'tag'
   }, {
     query: {
       method: "GET",

@@ -75,6 +75,20 @@ angular.module('movieApp.controllers', [])
     id: $stateParams.id
   });
 })
+  .controller('SettingsController', function ($scope, $stateParams, Settings) {
+
+    $scope.settings = new Settings(); //this object now has a $save() method
+    $scope.updateSettings = function () {
+      $scope.settings.$save(function () {
+        $state.go('repos');
+      });
+    };
+    $scope.loadSettings = function () {
+      $scope.settings = Settings.get();
+    };
+    $scope.loadSettings();
+  })
+
 
 .controller('AppsController', function ($scope, $stateParams, popupService, $window, Apps, AppKill) {
   $scope.apps = Apps.get({
@@ -95,25 +109,37 @@ angular.module('movieApp.controllers', [])
   $scope.details = AppDetails.get({
     id: $stateParams.id
   });
-
-}).controller('AppDeployController', function ($scope, $stateParams, AppDeploy) {
-
-  $scope.deploy = AppDeploy.get({
-    id: $stateParams.id
-  });
-
 })
 
-.controller('MovieViewController', function ($scope, $stateParams, Movie) { //bei neuen controllern und bezeichnungen auf ($scope, $stateParams, ---->Movie<---) achten!
+.controller('AppDeployController', function ($scope, $state, $stateParams, AppDeploy, Settings) {
+  $scope.settings = Settings.get();
+  $scope.form = {
+    reponame: $stateParams.reponame,
+    tag: $stateParams.tag
+  };
 
-  $scope.movie = Movie.get({ //ruft .factory Movie in services.js auf
-    id: $stateParams.id // übergibt id, damit der service mit der var "id " arbeiten kann
-  });
+  $scope.app = new AppDeploy();
+
+  $scope.appDeploy = function () {
+
+    image: $stateParams.reponame
+
+    $scope.app.$save(function () {
+      console.log('image ' + $stateParams.reponame);
+      $state.go('apps'); // ruft /apps in app.js auf?
+    });
+  }
 })
+  .controller('MovieViewController', function ($scope, $stateParams, Movie) { //bei neuen controllern und bezeichnungen auf ($scope, $stateParams, ---->Movie<---) achten!
+
+    $scope.movie = Movie.get({ //ruft .factory Movie in services.js auf
+      id: $stateParams.id // übergibt id, damit der service mit der var "id " arbeiten kann
+    });
+  })
 
 .controller('ImageTagsController', function ($scope, $stateParams, Image) {
 
-  $scope.tags = Image.get({ //ruft .factory Image in services.js auf
+  $scope.tags = Image.get({
     name: $stateParams.name
   });
 })
@@ -123,7 +149,6 @@ angular.module('movieApp.controllers', [])
   $scope.details = Details.get({
     details: $stateParams.details
   });
-
 })
 
 .controller('MovieCreateController', function ($scope, $state, $stateParams, Movie) {
@@ -135,7 +160,6 @@ angular.module('movieApp.controllers', [])
       $state.go('movies');
     });
   }
-
 })
 
 .controller('MovieEditController', function ($scope, $state, $stateParams, Movie) {

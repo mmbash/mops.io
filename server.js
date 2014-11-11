@@ -7,6 +7,36 @@ var app = express();
 var port = process.env.PORT_RUNTIME || process.env.PORT || 3000;
 var request = require('request');
 var config = require('./config.js');
+var sqlite3 = require('sqlite3').verbose();
+var db = new sqlite3.Database('./sqlite/mopsidb1');
+
+db.serialize(function () {
+  db.run("CREATE TABLE IF NOT EXISTS settings (marathon TEXT, registry TEXT)");
+  db.run("INSERT INTO settings (marathon, registry) VALUES ('192.168.1.180', '192.168.1.180')");
+});
+
+app.get('/settings', function (req, res) {
+  db.get("SELECT * FROM settings ", function (err, row) {
+    res.json({
+      "marathon": row.marathon,
+      "registry": row.registry
+    });
+  });
+});
+
+app.post('/settings', function (req, res) {
+  db.run("UPDATE settings SET marathon='" + req.param("marathon") + "', registry='" + req.param("registry") + "'"),
+  //  db.run("UPDATE settings SET marathon = 99999, registry = 0000000"),
+  function (error, row) {
+    if (error) {
+      console.error(error);
+      res.status(500);
+    } else {
+      res.status(202);
+    }
+    res.end();
+  }
+});
 
 
 // REPOS
@@ -84,9 +114,9 @@ app.delete(config.DELETEAPP, function deleteApps(req, res) {
   })).pipe(res);
 });
 
-// start a app
+// deploy a app
 app.post(config.DEPLOYAPP, function deployApps(req, res) {
-  console.log('Start an app');
+  console.log('Deploy an app');
   req.pipe(request.post(config.MARATHONHOST + config.MARATHONDEPLOYAPP, function (error, response, body) {
     if (error) {
       console.error('Connection error: ' + error.code);

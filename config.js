@@ -22,7 +22,7 @@ exports.CHANGEAPP = '/v1/apps/:id';
 exports.GETINFOSAPP = '/v1/apps/:id';
 
 // marathon stuff
-exports.MARATHONHOST = 'http://mesosmaster02:8080';
+exports.MARATHONHOST = 'http://mesosmaster01:8080';
 //exports.MARATHONHOST = 'http://192.168.1.180:8080';
 
 exports.MARATHONLISTAPPS = '/v2/apps';
@@ -30,3 +30,10 @@ exports.MARATHONDEPLOYAPP = '/v2/apps';
 exports.MARATHONDELETEAPP = '/v2/apps/';
 exports.MARATHONCHANGEAPP = '/v2/apps/';
 exports.MARATHONGETINFOSAPP = '/v2/apps/';
+
+// docker stuff
+exports.DOCKERHOST1 = 'http://mesosmaster02:4243';
+exports.DOCKERHOST2 = 'http://mesosmaster01:4243';
+exports.DOCKERLOG = '/containers/:id/logs';
+exports.DOCKERLIST = '/containers/json';
+exports.DOCKERLOGPART1 = '/containers/';

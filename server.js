@@ -56,6 +56,7 @@ app.get('/v1/deleterepos/:name', function (req, res, next) {
     console.log('[' + new Date() + '] ', req);
     if (error) {
       console.error('Connection error: ' + error.code);
+			res.statusCode = error.code;
     }
   })).pipe(res);
 });
@@ -81,8 +82,6 @@ app.get('/v1/layer', function getLayer(req, res) {
     }
   })).pipe(res);
 });
-
-
 
 // list all running apps
 app.get(config.LISTAPPS, function getApps(req, res) {
@@ -139,6 +138,34 @@ process.on('uncaughtException', function (err) {
   console.error('uncaughtException: ' + err.message);
   console.error(err.stack);
   process.exit(1);
+});
+
+// get docker logs of a running app
+app.get(config.DOCKERLOG, function getDockerLog(req, res) {
+  console.log('Get logs of container: ' + req.params.id);
+  req.pipe(request.get({url: config.DOCKERHOST + config.DOCKERLOGPART1 + req.params.id + '/logs', qs:req.query}, function (error, response, body) {
+    if (error) {
+      console.error('Connection error: ' + error.code);
+    }
+  })).pipe(res);
+});
+
+// get running docker containers
+app.get(config.DOCKERLIST, function getDockerLog(req, res) {
+  console.log('Get all containers');
+  req.pipe(request.get(config.DOCKERHOST1 + config.DOCKERLIST, function (error, response, body) {
+    if (error) {
+      console.error('Connection error: ' + error.code);
+    }
+  })).pipe(res);
+
+  //Simple test
+  console.log('Get all containers');
+	req.pipe(request.get(config.DOCKERHOST2 + config.DOCKERLIST, function (error, response, body) {
+    if (error) {
+      console.error('Connection error: ' + error.code);
+    }
+  })).pipe(res);
 });
 
 app.use(express.static(__dirname + '/public'));

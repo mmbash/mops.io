@@ -2,7 +2,7 @@
 // BASE SETUP
 // ==============================================
 
-var cat = require('pipette');
+var CombinedStream = require('combined-stream');
 var express = require('express');
 var app = express();
 var port = process.env.PORT_RUNTIME || process.env.PORT || 3000;
@@ -160,32 +160,49 @@ process.on('uncaughtException', function (err) {
 // get docker logs of a running app
 app.get(config.DOCKERLOG, function getDockerLog(req, res) {
   console.log('Get logs of container: ' + req.params.id);
-  req.pipe(request.get({
-    url: config.DOCKERHOST + config.DOCKERLOGPART1 + req.params.id + '/logs',
+	
+  var combinedStream = CombinedStream.create();
+  
+	combinedStream.append(req.pipe(request.get({
+    url: config.DOCKERHOST1 + config.DOCKERLOGPART1 + req.params.id + '/logs',
     qs: req.query
   }, function (error, response, body) {
     if (error) {
       console.error('Connection error: ' + error.code);
     }
-  })).pipe(res);
+  })))
+	
+	combinedStream.append(req.pipe(request.get({
+    url: config.DOCKERHOST2 + config.DOCKERLOGPART1 + req.params.id + '/logs',
+    qs: req.query
+  }, function (error, response, body) {
+    if (error) {
+      console.error('Connection error: ' + error.code);
+    }
+  })))
+
+	combinedStream.pipe(res);
 });
 
 // get running docker containers
 app.get(config.DOCKERLIST, function getDockerLog(req, res) {
   console.log('Get all containers');
-  req.pipe(request.get(config.DOCKERHOST1 + config.DOCKERLIST, function (error, response, body) {
+  
+	var combinedStream = CombinedStream.create();
+  
+	combinedStream.append(req.pipe(request.get(config.DOCKERHOST1 + config.DOCKERLIST, function (error, response, body) {
     if (error) {
       console.error('Connection error: ' + error.code);
     }
-  })).pipe(res);
-
-  //Simple test
-  console.log('Get all containers');
-  req.pipe(request.get(config.DOCKERHOST2 + config.DOCKERLIST, function (error, response, body) {
+  })));
+	
+	combinedStream.append(req.pipe(request.get(config.DOCKERHOST2 + config.DOCKERLIST, function (error, response, body) {
     if (error) {
       console.error('Connection error: ' + error.code);
     }
-  })).pipe(res);
+  })));
+  
+	combinedStream.pipe(res);
 });
 
 app.use(express.static(__dirname + '/public'));

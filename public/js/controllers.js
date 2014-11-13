@@ -80,7 +80,7 @@ angular.module('mopsiApp.controllers', [])
     $scope.settings = new Settings(); //this object now has a $save() method
     $scope.updateSettings = function () {
       $scope.settings.$save(function () {
-        $state.go('repos');
+        $state.go('viewRepos');
       });
     };
     $scope.loadSettings = function () {

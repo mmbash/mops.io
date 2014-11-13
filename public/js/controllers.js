@@ -1,9 +1,19 @@
 angular.module('mopsiApp.controllers', [])
 
-.controller('ReposController', function ($scope, $stateParams, popupService, $window, $modal, $log, Repos, ReposDelete) {
+.controller('ReposController', function ($scope, $stateParams, popupService, $window, $modal, $log, dialogs, Repos, ReposDelete) {
   $scope.repos = Repos.get({
-    id: $stateParams.id
-  });
+      id: $stateParams.id
+    },
+    function () {
+      //good code
+      console.log('Looks good ');
+    }, function (response) {
+      //404 or bad
+      if (response.status !== 200) {
+        dialogs.error('CONNECTION ERROR!', 'Check your Settings!');
+      }
+    });
+
   $scope.deleteRepo = function (name) {
     if (popupService.showPopup('Really delete ' + name + '?')) {
       ReposDelete.get({
@@ -107,7 +117,6 @@ angular.module('mopsiApp.controllers', [])
     };
     $scope.loadSettings();
   })
-
 
 .controller('AppsController', function ($scope, $stateParams, popupService, $window, Apps, AppKill) {
   $scope.apps = Apps.get({

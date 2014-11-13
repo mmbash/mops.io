@@ -1,7 +1,7 @@
 {
   "name": "mopsi.io",
   "description": "Ya man",
-  "version": "0.0.4",
+  "version": "0.1.4",
   "private": true,
   "dependencies": {
     "express": "4.x",

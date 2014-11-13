@@ -40,6 +40,7 @@ app.get('/settings', function (req, res) {
   });
 });
 
+
 app.post('/settings', function (req, res) {
   db.run("UPDATE settings SET marathon='" + req.param("marathon") + "', registry='" + req.param("registry") + "' WHERE id='1'", function (error, row) {
     if (error) {

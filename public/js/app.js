@@ -47,6 +47,9 @@ angular.module('mopsiApp').config(function ($stateProvider, $httpProvider) {
       templateUrl: 'partials/apps.html',
       controller: 'AppsController'
     });
+
+  $httpProvider.interceptors.push('timeoutHttpIntercept');
+
 }).run(function ($state) {
   $state.go('viewRepos'); //Standard Startview
 });

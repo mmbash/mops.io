@@ -1,4 +1,4 @@
-angular.module('mopsiApp', ['ui.bootstrap', 'ui.router', 'ngResource', 'mopsiApp.controllers', 'mopsiApp.services', 'datatables']);
+angular.module('mopsiApp', ['ui.bootstrap', 'dialogs.main', 'ui.router', 'ngResource', 'mopsiApp.controllers', 'mopsiApp.services', 'datatables']);
 
 angular.module('mopsiApp').config(function ($stateProvider, $httpProvider) {
   $stateProvider

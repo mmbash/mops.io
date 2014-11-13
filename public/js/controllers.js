@@ -38,8 +38,23 @@ angular.module('mopsiApp.controllers', [])
       $log.info('Modal dismissed at: ' + new Date());
     });
   }
+  ///Pagination
+  $scope.totalItems = 64;
+  $scope.currentPage = 1;
 
-  ///
+  $scope.setPage = function (pageNo) {
+    $scope.currentPage = pageNo;
+  };
+
+  $scope.pageChanged = function () {
+    console.log('Page changed to: ' + $scope.currentPage);
+  };
+
+  $scope.maxSize = 5;
+  $scope.bigTotalItems = 175;
+  $scope.bigCurrentPage = 1;
+
+
 })
 
 .controller('ModalInstanceCtrl', function ($scope, $modalInstance, items, name) {
@@ -75,12 +90,16 @@ angular.module('mopsiApp.controllers', [])
     id: $stateParams.id //übergibt id, damit der service mit der var "id " arbeiten kann
   });
 })
-  .controller('SettingsController', function ($scope, $stateParams, Settings) {
+  .controller('SettingsController', function ($scope, $stateParams, dialogs, Settings) {
 
     $scope.settings = new Settings(); //this object now has a $save() method
     $scope.updateSettings = function () {
-      $scope.settings.$save(function () {
+      $scope.settings.$save(function (status) {
+        dialogs.notify('Settings Saved!', 'Looks good man.');
         $state.go('viewRepos');
+      }, function (error) {
+        // failure
+        dialogs.error('ERROR!', 'Something bad happened!');
       });
     };
     $scope.loadSettings = function () {

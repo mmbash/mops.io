@@ -1,4 +1,4 @@
-angular.module('movieApp.controllers', [])
+angular.module('mopsiApp.controllers', [])
 
 .controller('ReposController', function ($scope, $stateParams, popupService, $window, $modal, $log, Repos, ReposDelete) {
   $scope.repos = Repos.get({
@@ -71,8 +71,8 @@ angular.module('movieApp.controllers', [])
 
 .controller('ImageLayerController', function ($scope, $stateParams, ImageLayer) {
 
-  $scope.details = ImageLayer.get({
-    id: $stateParams.id
+  $scope.details = ImageLayer.get({ //ruft .factory ImageLayer in services.js auf
+    id: $stateParams.id //übergibt id, damit der service mit der var "id " arbeiten kann
   });
 })
   .controller('SettingsController', function ($scope, $stateParams, Settings) {
@@ -126,16 +126,10 @@ angular.module('movieApp.controllers', [])
 
     $scope.app.$save(function () {
       console.log('image ' + $stateParams.reponame);
-      $state.go('apps'); // ruft /apps in app.js auf?
+      $state.go('apps'); // ruft /apps in app.js auf
     });
   }
 })
-  .controller('MovieViewController', function ($scope, $stateParams, Movie) { //bei neuen controllern und bezeichnungen auf ($scope, $stateParams, ---->Movie<---) achten!
-
-    $scope.movie = Movie.get({ //ruft .factory Movie in services.js auf
-      id: $stateParams.id // übergibt id, damit der service mit der var "id " arbeiten kann
-    });
-  })
 
 .controller('ImageTagsController', function ($scope, $stateParams, Image) {
 
@@ -150,31 +144,3 @@ angular.module('movieApp.controllers', [])
     details: $stateParams.details
   });
 })
-
-.controller('MovieCreateController', function ($scope, $state, $stateParams, Movie) {
-
-  $scope.movie = new Movie();
-
-  $scope.addMovie = function () {
-    $scope.movie.$save(function () {
-      $state.go('movies');
-    });
-  }
-})
-
-.controller('MovieEditController', function ($scope, $state, $stateParams, Movie) {
-
-  $scope.updateMovie = function () {
-    $scope.movie.$update(function () {
-      $state.go('movies');
-    });
-  };
-
-  $scope.loadMovie = function () {
-    $scope.movie = Movie.get({
-      id: $stateParams.id
-    });
-  };
-
-  $scope.loadMovie();
-});

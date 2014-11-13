@@ -1,4 +1,4 @@
-angular.module('movieApp.services', [])
+angular.module('mopsiApp.services', [])
 
 
 

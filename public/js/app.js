@@ -1,6 +1,6 @@
-angular.module('movieApp', ['ui.bootstrap', 'ui.router', 'ngResource', 'movieApp.controllers', 'movieApp.services', 'datatables']);
+angular.module('mopsiApp', ['ui.bootstrap', 'ui.router', 'ngResource', 'movieApp.controllers', 'movieApp.services', 'datatables']);
 
-angular.module('movieApp').config(function ($stateProvider, $httpProvider) {
+angular.module('mopsiApp').config(function ($stateProvider, $httpProvider) {
   $stateProvider
     .state('viewRepos', { //viewXY wird über ui-sref von xy.html aufgerufen
       url: '/repos/:name', //afaik muss url eindeutig sein

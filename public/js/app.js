@@ -1,6 +1,6 @@
-angular.module('movieApp', ['ui.bootstrap', 'ui.router', 'ngResource', 'movieApp.controllers', 'movieApp.services', 'datatables']);
+angular.module('mopsiApp', ['ui.bootstrap', 'dialogs.main', 'ui.router', 'ngResource', 'mopsiApp.controllers', 'mopsiApp.services', 'datatables']);
 
-angular.module('movieApp').config(function ($stateProvider, $httpProvider) {
+angular.module('mopsiApp').config(function ($stateProvider, $httpProvider) {
   $stateProvider
     .state('viewRepos', { //viewXY wird über ui-sref von xy.html aufgerufen
       url: '/repos/:name', //afaik muss url eindeutig sein
@@ -47,6 +47,9 @@ angular.module('movieApp').config(function ($stateProvider, $httpProvider) {
       templateUrl: 'partials/apps.html',
       controller: 'AppsController'
     });
+
+  $httpProvider.interceptors.push('timeoutHttpIntercept');
+
 }).run(function ($state) {
   $state.go('viewRepos'); //Standard Startview
 });

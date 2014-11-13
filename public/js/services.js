@@ -1,6 +1,15 @@
-angular.module('movieApp.services', [])
+angular.module('mopsiApp.services', [])
 
 
+// Global Timeout for connection errors
+.factory('timeoutHttpIntercept', function ($rootScope, $q) {
+  return {
+    'request': function (config) {
+      config.timeout = 3000;
+      return config;
+    }
+  };
+})
 
 .factory('Settings', function ($resource) {
   return $resource('/settings/:host/:ip', {

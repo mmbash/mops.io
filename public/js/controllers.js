@@ -1,9 +1,19 @@
-angular.module('movieApp.controllers', [])
+angular.module('mopsiApp.controllers', [])
 
-.controller('ReposController', function ($scope, $stateParams, popupService, $window, $modal, $log, Repos, ReposDelete) {
+.controller('ReposController', function ($scope, $stateParams, popupService, $window, $modal, $log, dialogs, Repos, ReposDelete) {
   $scope.repos = Repos.get({
-    id: $stateParams.id
-  });
+      id: $stateParams.id
+    },
+    function () {
+      //good code
+      console.log('Looks good ');
+    }, function (response) {
+      //404 or bad
+      if (response.status !== 200) {
+        dialogs.error('CONNECTION ERROR!', 'Check your Settings!');
+      }
+    });
+
   $scope.deleteRepo = function (name) {
     if (popupService.showPopup('Really delete ' + name + '?')) {
       ReposDelete.get({
@@ -38,8 +48,23 @@ angular.module('movieApp.controllers', [])
       $log.info('Modal dismissed at: ' + new Date());
     });
   }
+  ///Pagination
+  $scope.totalItems = 64;
+  $scope.currentPage = 1;
 
-  ///
+  $scope.setPage = function (pageNo) {
+    $scope.currentPage = pageNo;
+  };
+
+  $scope.pageChanged = function () {
+    console.log('Page changed to: ' + $scope.currentPage);
+  };
+
+  $scope.maxSize = 5;
+  $scope.bigTotalItems = 175;
+  $scope.bigCurrentPage = 1;
+
+
 })
 
 .controller('ModalInstanceCtrl', function ($scope, $modalInstance, items, name) {
@@ -71,16 +96,20 @@ angular.module('movieApp.controllers', [])
 
 .controller('ImageLayerController', function ($scope, $stateParams, ImageLayer) {
 
-  $scope.details = ImageLayer.get({
-    id: $stateParams.id
+  $scope.details = ImageLayer.get({ //ruft .factory ImageLayer in services.js auf
+    id: $stateParams.id //übergibt id, damit der service mit der var "id " arbeiten kann
   });
 })
-  .controller('SettingsController', function ($scope, $stateParams, Settings) {
+  .controller('SettingsController', function ($scope, $stateParams, dialogs, Settings) {
 
     $scope.settings = new Settings(); //this object now has a $save() method
     $scope.updateSettings = function () {
-      $scope.settings.$save(function () {
-        $state.go('repos');
+      $scope.settings.$save(function (status) {
+        dialogs.notify('Settings Saved!', 'Looks good man.');
+        $state.go('viewRepos');
+      }, function (error) {
+        // failure
+        dialogs.error('ERROR!', 'Something bad happened!');
       });
     };
     $scope.loadSettings = function () {
@@ -88,7 +117,6 @@ angular.module('movieApp.controllers', [])
     };
     $scope.loadSettings();
   })
-
 
 .controller('AppsController', function ($scope, $stateParams, popupService, $window, Apps, AppKill) {
   $scope.apps = Apps.get({
@@ -126,16 +154,10 @@ angular.module('movieApp.controllers', [])
 
     $scope.app.$save(function () {
       console.log('image ' + $stateParams.reponame);
-      $state.go('apps'); // ruft /apps in app.js auf?
+      $state.go('apps'); // ruft /apps in app.js auf
     });
   }
 })
-  .controller('MovieViewController', function ($scope, $stateParams, Movie) { //bei neuen controllern und bezeichnungen auf ($scope, $stateParams, ---->Movie<---) achten!
-
-    $scope.movie = Movie.get({ //ruft .factory Movie in services.js auf
-      id: $stateParams.id // übergibt id, damit der service mit der var "id " arbeiten kann
-    });
-  })
 
 .controller('ImageTagsController', function ($scope, $stateParams, Image) {
 
@@ -150,31 +172,3 @@ angular.module('movieApp.controllers', [])
     details: $stateParams.details
   });
 })
-
-.controller('MovieCreateController', function ($scope, $state, $stateParams, Movie) {
-
-  $scope.movie = new Movie();
-
-  $scope.addMovie = function () {
-    $scope.movie.$save(function () {
-      $state.go('movies');
-    });
-  }
-})
-
-.controller('MovieEditController', function ($scope, $state, $stateParams, Movie) {
-
-  $scope.updateMovie = function () {
-    $scope.movie.$update(function () {
-      $state.go('movies');
-    });
-  };
-
-  $scope.loadMovie = function () {
-    $scope.movie = Movie.get({
-      id: $stateParams.id
-    });
-  };
-
-  $scope.loadMovie();
-});

@@ -10,14 +10,30 @@ var request = require('request');
 var config = require('./config.js');
 var sqlite3 = require('sqlite3').verbose();
 var db = new sqlite3.Database('./sqlite/mopsidb1');
+var registryip = getIp();
+var marathonip = getIp();
 
 db.serialize(function () {
-  db.run("CREATE TABLE IF NOT EXISTS settings (marathon TEXT, registry TEXT)");
-  db.run("INSERT INTO settings (marathon, registry) VALUES ('192.168.1.180', '192.168.1.180')");
+  db.run("CREATE TABLE IF NOT EXISTS settings (marathon TEXT, registry TEXT, id INT)");
+  db.run("REPLACE INTO settings (marathon, registry, id) VALUES('http://192.168.1.180:8080/','http://192.168.1.188:5000/','1')");
 });
 
+function getIp(req, res) {
+  db.get('SELECT * FROM settings', function (error, row) {
+    if (error !== null) {
+      console.error(error);
+    } else {
+      registryip = row.registry;
+      marathonip = row.marathon;
+
+      console.log(row);
+      console.log('IPs:' + registryip + ' ' + marathonip);
+    }
+  });
+};
+
 app.get('/settings', function (req, res) {
-  db.get("SELECT * FROM settings ", function (err, row) {
+  db.get("SELECT * FROM settings WHERE id='1'", function (err, row) {
     res.json({
       "marathon": row.marathon,
       "registry": row.registry
@@ -25,10 +41,9 @@ app.get('/settings', function (req, res) {
   });
 });
 
+
 app.post('/settings', function (req, res) {
-  db.run("UPDATE settings SET marathon='" + req.param("marathon") + "', registry='" + req.param("registry") + "'"),
-  //  db.run("UPDATE settings SET marathon = 99999, registry = 0000000"),
-  function (error, row) {
+  db.run("UPDATE settings SET marathon='" + req.param("marathon") + "', registry='" + req.param("registry") + "' WHERE id='1'", function (error, row) {
     if (error) {
       console.error(error);
       res.status(500);
@@ -36,15 +51,16 @@ app.post('/settings', function (req, res) {
       res.status(202);
     }
     res.end();
-  }
+    getIp();
+  });
 });
-
 
 // REPOS
 app.get('/v1/repos', function (req, res) {
   console.log('Get repos');
-  req.pipe(request.get(config.REGISTRYHOST + config.REGLISTREPOS, function (error, response, body) {
-    //    console.log('[' + new Date() + '] ', req);
+  req.pipe(request.get(registryip + config.REGLISTREPOS, function (error, response, body) {
+    //req.pipe(request.get(config.REGISTRYHOST + config.REGLISTREPOS, function (error, response, body) {
+    console.log('[' + new Date() + '] ', req);
     if (error) {
       console.error('Connection error: ' + error.code);
     }
@@ -53,11 +69,11 @@ app.get('/v1/repos', function (req, res) {
 
 // DELETE REPOS
 app.get('/v1/deleterepos/:name', function (req, res, next) {
-  req.pipe(request.del(config.REGISTRYHOST + config.REGREPOSTAGS + req.param("name") + '/', function (error, response, body) {
+  req.pipe(request.del(registryip + config.REGREPOSTAGS + req.param("name") + '/', function (error, response, body) {
     console.log('[' + new Date() + '] ', req);
     if (error) {
       console.error('Connection error: ' + error.code);
-			res.statusCode = error.code;
+      res.statusCode = error.code;
     }
   })).pipe(res);
 });
@@ -65,7 +81,7 @@ app.get('/v1/deleterepos/:name', function (req, res, next) {
 // TAGS
 app.get('/v1/tags', function getTags(req, res) {
   console.log('Get tags');
-  req.pipe(request.get(config.REGISTRYHOST + config.REGREPOSTAGS + req.param("name") + '/tags', function (error, response, body) {
+  req.pipe(request.get(registryip + config.REGREPOSTAGS + req.param("name") + '/tags', function (error, response, body) {
     console.log('[' + new Date() + '] ', req.url);
     if (error) {
       console.error('Connection error: ' + error.code);
@@ -76,7 +92,7 @@ app.get('/v1/tags', function getTags(req, res) {
 // LAYER
 app.get('/v1/layer', function getLayer(req, res) {
   console.log('Get layer');
-  req.pipe(request.get(config.REGISTRYHOST + config.REG_IMAGE_LAYER + req.param("id") + '/json', function (error, response, body) {
+  req.pipe(request.get(registryip + config.REG_IMAGE_LAYER + req.param("id") + '/json', function (error, response, body) {
     console.log('[' + new Date() + '] ', req.url);
     if (error) {
       console.error('Connection error: ' + error.code);
@@ -87,7 +103,7 @@ app.get('/v1/layer', function getLayer(req, res) {
 // list all running apps
 app.get(config.LISTAPPS, function getApps(req, res) {
   console.log('Get running apps');
-  req.pipe(request.get(config.MARATHONHOST + config.MARATHONLISTAPPS, function (error, response, body) {
+  req.pipe(request.get(marathonip + config.MARATHONLISTAPPS, function (error, response, body) {
     if (error) {
       console.error('Connection error: ' + error.code);
     }
@@ -144,7 +160,10 @@ process.on('uncaughtException', function (err) {
 // get docker logs of a running app
 app.get(config.DOCKERLOG, function getDockerLog(req, res) {
   console.log('Get logs of container: ' + req.params.id);
-  req.pipe(request.get({url: config.DOCKERHOST + config.DOCKERLOGPART1 + req.params.id + '/logs', qs:req.query}, function (error, response, body) {
+  req.pipe(request.get({
+    url: config.DOCKERHOST + config.DOCKERLOGPART1 + req.params.id + '/logs',
+    qs: req.query
+  }, function (error, response, body) {
     if (error) {
       console.error('Connection error: ' + error.code);
     }
@@ -162,7 +181,7 @@ app.get(config.DOCKERLIST, function getDockerLog(req, res) {
 
   //Simple test
   console.log('Get all containers');
-	req.pipe(request.get(config.DOCKERHOST2 + config.DOCKERLIST, function (error, response, body) {
+  req.pipe(request.get(config.DOCKERHOST2 + config.DOCKERLIST, function (error, response, body) {
     if (error) {
       console.error('Connection error: ' + error.code);
     }

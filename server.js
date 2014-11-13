@@ -11,7 +11,6 @@ var sqlite3 = require('sqlite3').verbose();
 var db = new sqlite3.Database('./sqlite/mopsidb2');
 var registryip = getIp();
 
-
 db.serialize(function () {
   db.run("CREATE TABLE IF NOT EXISTS settings (marathon TEXT, registry TEXT, id INT)");
   db.run("REPLACE INTO settings (marathon, registry, id) VALUES(1,1,1)");
@@ -70,7 +69,7 @@ app.get('/v1/deleterepos/:name', function (req, res, next) {
     console.log('[' + new Date() + '] ', req);
     if (error) {
       console.error('Connection error: ' + error.code);
-			res.statusCode = error.code;
+      res.statusCode = error.code;
     }
   })).pipe(res);
 });
@@ -157,7 +156,10 @@ process.on('uncaughtException', function (err) {
 // get docker logs of a running app
 app.get(config.DOCKERLOG, function getDockerLog(req, res) {
   console.log('Get logs of container: ' + req.params.id);
-  req.pipe(request.get({url: config.DOCKERHOST + config.DOCKERLOGPART1 + req.params.id + '/logs', qs:req.query}, function (error, response, body) {
+  req.pipe(request.get({
+    url: config.DOCKERHOST + config.DOCKERLOGPART1 + req.params.id + '/logs',
+    qs: req.query
+  }, function (error, response, body) {
     if (error) {
       console.error('Connection error: ' + error.code);
     }
@@ -175,7 +177,7 @@ app.get(config.DOCKERLIST, function getDockerLog(req, res) {
 
   //Simple test
   console.log('Get all containers');
-	req.pipe(request.get(config.DOCKERHOST2 + config.DOCKERLIST, function (error, response, body) {
+  req.pipe(request.get(config.DOCKERHOST2 + config.DOCKERLIST, function (error, response, body) {
     if (error) {
       console.error('Connection error: ' + error.code);
     }

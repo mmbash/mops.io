@@ -49,6 +49,7 @@ app.post('/settings', function (req, res) {
       res.status(202);
     }
     res.end();
+    getIp();
   });
 });
 
@@ -66,7 +67,7 @@ app.get('/v1/repos', function (req, res) {
 
 // DELETE REPOS
 app.get('/v1/deleterepos/:name', function (req, res, next) {
-  req.pipe(request.del(config.REGISTRYHOST + config.REGREPOSTAGS + req.param("name") + '/', function (error, response, body) {
+  req.pipe(request.del(registryip + config.REGREPOSTAGS + req.param("name") + '/', function (error, response, body) {
     console.log('[' + new Date() + '] ', req);
     if (error) {
       console.error('Connection error: ' + error.code);
@@ -78,7 +79,7 @@ app.get('/v1/deleterepos/:name', function (req, res, next) {
 // TAGS
 app.get('/v1/tags', function getTags(req, res) {
   console.log('Get tags');
-  req.pipe(request.get(config.REGISTRYHOST + config.REGREPOSTAGS + req.param("name") + '/tags', function (error, response, body) {
+  req.pipe(request.get(registryip + config.REGREPOSTAGS + req.param("name") + '/tags', function (error, response, body) {
     console.log('[' + new Date() + '] ', req.url);
     if (error) {
       console.error('Connection error: ' + error.code);
@@ -89,7 +90,7 @@ app.get('/v1/tags', function getTags(req, res) {
 // LAYER
 app.get('/v1/layer', function getLayer(req, res) {
   console.log('Get layer');
-  req.pipe(request.get(config.REGISTRYHOST + config.REG_IMAGE_LAYER + req.param("id") + '/json', function (error, response, body) {
+  req.pipe(request.get(registryip + config.REG_IMAGE_LAYER + req.param("id") + '/json', function (error, response, body) {
     console.log('[' + new Date() + '] ', req.url);
     if (error) {
       console.error('Connection error: ' + error.code);

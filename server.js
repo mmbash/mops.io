@@ -8,15 +8,31 @@ var port = process.env.PORT_RUNTIME || process.env.PORT || 3000;
 var request = require('request');
 var config = require('./config.js');
 var sqlite3 = require('sqlite3').verbose();
-var db = new sqlite3.Database('./sqlite/mopsidb1');
+var db = new sqlite3.Database('./sqlite/mopsidb2');
+var registryip = getIp();
+
 
 db.serialize(function () {
-  db.run("CREATE TABLE IF NOT EXISTS settings (marathon TEXT, registry TEXT)");
-  db.run("INSERT INTO settings (marathon, registry) VALUES ('192.168.1.180', '192.168.1.180')");
+  db.run("CREATE TABLE IF NOT EXISTS settings (marathon TEXT, registry TEXT, id INT)");
+  db.run("REPLACE INTO settings (marathon, registry, id) VALUES(1,1,1)");
 });
 
+function getIp(req, res) {
+  db.get('SELECT * FROM settings', function (error, row) {
+    if (error !== null) {
+      console.error(error);
+    } else {
+      registryip = row.registry;
+      marathonip = row.marathon;
+
+      console.log(row);
+      console.log('IPs:' + registryip + ' ' + marathonip);
+    }
+  });
+};
+
 app.get('/settings', function (req, res) {
-  db.get("SELECT * FROM settings ", function (err, row) {
+  db.get("SELECT * FROM settings WHERE id='1'", function (err, row) {
     res.json({
       "marathon": row.marathon,
       "registry": row.registry
@@ -25,9 +41,7 @@ app.get('/settings', function (req, res) {
 });
 
 app.post('/settings', function (req, res) {
-  db.run("UPDATE settings SET marathon='" + req.param("marathon") + "', registry='" + req.param("registry") + "'"),
-  //  db.run("UPDATE settings SET marathon = 99999, registry = 0000000"),
-  function (error, row) {
+  db.run("UPDATE settings SET marathon='" + req.param("marathon") + "', registry='" + req.param("registry") + "' WHERE id='1'", function (error, row) {
     if (error) {
       console.error(error);
       res.status(500);
@@ -35,15 +49,15 @@ app.post('/settings', function (req, res) {
       res.status(202);
     }
     res.end();
-  }
+  });
 });
-
 
 // REPOS
 app.get('/v1/repos', function (req, res) {
   console.log('Get repos');
-  req.pipe(request.get(config.REGISTRYHOST + config.REGLISTREPOS, function (error, response, body) {
-    //    console.log('[' + new Date() + '] ', req);
+  req.pipe(request.get(registryip + config.REGLISTREPOS, function (error, response, body) {
+    //req.pipe(request.get(config.REGISTRYHOST + config.REGLISTREPOS, function (error, response, body) {
+    console.log('[' + new Date() + '] ', req);
     if (error) {
       console.error('Connection error: ' + error.code);
     }
@@ -87,7 +101,7 @@ app.get('/v1/layer', function getLayer(req, res) {
 // list all running apps
 app.get(config.LISTAPPS, function getApps(req, res) {
   console.log('Get running apps');
-  req.pipe(request.get(config.MARATHONHOST + config.MARATHONLISTAPPS, function (error, response, body) {
+  req.pipe(request.get(marathonip + config.MARATHONLISTAPPS, function (error, response, body) {
     if (error) {
       console.error('Connection error: ' + error.code);
     }

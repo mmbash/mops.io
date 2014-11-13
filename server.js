@@ -2,6 +2,7 @@
 // BASE SETUP
 // ==============================================
 
+var cat = require('pipette');
 var express = require('express');
 var app = express();
 var port = process.env.PORT_RUNTIME || process.env.PORT || 3000;

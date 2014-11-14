@@ -113,7 +113,7 @@ app.get(config.LISTAPPS, function getApps(req, res) {
 // get infos of a running app
 app.get(config.GETINFOSAPP, function getAppInfo(req, res) {
   console.log('Get info of app: ' + req.params.id);
-  req.pipe(request.get(config.MARATHONHOST + config.MARATHONGETINFOSAPP + req.params.id, function (error, response, body) {
+  req.pipe(request.get(marathonip + config.MARATHONGETINFOSAPP + req.params.id, function (error, response, body) {
     if (error) {
       console.error('Connection error: ' + error.code);
     }
@@ -123,7 +123,7 @@ app.get(config.GETINFOSAPP, function getAppInfo(req, res) {
 // stop a app
 app.delete(config.DELETEAPP, function deleteApps(req, res) {
   console.log('Delete an app');
-  req.pipe(request.del(config.MARATHONHOST + config.MARATHONDELETEAPP + req.params.id, function (error, response, body) {
+  req.pipe(request.del(marathonip + config.MARATHONDELETEAPP + req.params.id, function (error, response, body) {
     if (error) {
       console.error('Connection error: ' + error.code);
     }
@@ -143,7 +143,7 @@ app.post(config.DEPLOYAPP, function deployApps(req, res) {
 // change params of a app
 app.put(config.CHANGEAPP, function changeApps(req, res) {
   console.log('Change an app: ' + req.params.id);
-  req.pipe(request.put(config.MARATHONHOST + config.MARATHONCHANGEAPP + req.params.id, function (error, response, body) {
+  req.pipe(request.put(marathonip + config.MARATHONCHANGEAPP + req.params.id, function (error, response, body) {
     if (error) {
       console.error('Connection error: ' + error.code);
     }
@@ -163,7 +163,7 @@ app.get(config.DOCKERLOG, function getDockerLog(req, res) {
 
   var combinedStream = CombinedStream.create();
 
-	combinedStream.append(req.pipe(request.get({
+  combinedStream.append(req.pipe(request.get({
     url: config.DOCKERHOST1 + config.DOCKERLOGPART1 + req.params.id + '/logs',
     qs: req.query
   }, function (error, response, body) {
@@ -172,7 +172,7 @@ app.get(config.DOCKERLOG, function getDockerLog(req, res) {
     }
   })))
 
-	combinedStream.append(req.pipe(request.get({
+  combinedStream.append(req.pipe(request.get({
     url: config.DOCKERHOST2 + config.DOCKERLOGPART1 + req.params.id + '/logs',
     qs: req.query
   }, function (error, response, body) {
@@ -181,28 +181,28 @@ app.get(config.DOCKERLOG, function getDockerLog(req, res) {
     }
   })))
 
-	combinedStream.pipe(res);
+  combinedStream.pipe(res);
 });
 
 // get running docker containers
 app.get(config.DOCKERLIST, function getDockerLog(req, res) {
   console.log('Get all containers');
 
-	var combinedStream = CombinedStream.create();
+  var combinedStream = CombinedStream.create();
 
-	combinedStream.append(req.pipe(request.get(config.DOCKERHOST1 + config.DOCKERLIST, function (error, response, body) {
+  combinedStream.append(req.pipe(request.get(config.DOCKERHOST1 + config.DOCKERLIST, function (error, response, body) {
     if (error) {
       console.error('Connection error: ' + error.code);
     }
   })));
 
-	combinedStream.append(req.pipe(request.get(config.DOCKERHOST2 + config.DOCKERLIST, function (error, response, body) {
+  combinedStream.append(req.pipe(request.get(config.DOCKERHOST2 + config.DOCKERLIST, function (error, response, body) {
     if (error) {
       console.error('Connection error: ' + error.code);
     }
   })));
 
-	combinedStream.pipe(res);
+  combinedStream.pipe(res);
 });
 
 app.use(express.static(__dirname + '/public'));

@@ -132,7 +132,7 @@ app.delete(config.DELETEAPP, function deleteApps(req, res) {
 // deploy a app
 app.post(config.DEPLOYAPP, function deployApps(req, res) {
   console.log('Deploy an app');
-  req.pipe(request.post(config.MARATHONHOST + config.MARATHONDEPLOYAPP, function (error, response, body) {
+  req.pipe(request.post(marathonip + config.MARATHONDEPLOYAPP, function (error, response, body) {
     if (error) {
       console.error('Connection error: ' + error.code);
     }

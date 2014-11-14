@@ -5,7 +5,7 @@ angular.module('mopsiApp.services', [])
 .factory('timeoutHttpIntercept', function ($rootScope, $q) {
   return {
     'request': function (config) {
-      config.timeout = 3000;
+      config.timeout = 5000;
       return config;
     }
   };

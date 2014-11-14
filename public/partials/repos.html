@@ -19,10 +19,14 @@
 
 </table>
 
-<pagination boundary-links="true" total-items="totalItems" ng-model="currentPage" class="pagination-sm" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;" items-per-page="3"></pagination>
-<pre>The selected page no: {{currentPage}}</pre>
-<button class="btn btn-info" ng-click="setPage(3)">Set current page to: 3</button>
+<pagination total-items="totalItems" items-per-page="itemsPerPage" ng-model="currentPage" ng-change="pageChanged()"></pagination>
 
 <hr />
 
-<div ng-include="'js/modal.js'"></div>
+<div ng-include=" 'js/modal.js' "></div>
+<p>
+  Pagination not yet working :(
+  <br>total Items: {{totalItems}}
+  <br />Items per page: {{itemsPerPage}}
+  <br />Current Page: {{currentPage}}
+</p>

@@ -1,71 +1,39 @@
 angular.module('mopsiApp.controllers', [])
 
-.controller('ReposController', function ($scope, $stateParams, popupService, $window, $modal, $log, dialogs, Repos, ReposDelete) {
-  $scope.repos = Repos.get({
-      id: $stateParams.id
-    },
-    function () {
+.controller('ReposController', function ($q, $scope, $stateParams, popupService, $window, $modal, $log, dialogs, Repos, ReposDelete) {
+  $scope.repos = Repos.get(
+    function (response) {
       //good code
+
       console.log('Looks good ');
-    }, function (response) {
+      $scope.repos.$promise.then(function () {
+        $scope.totalItems = $scope.repos.length;
+        $scope.$watch('currentPage + itemsPerPage', function () {
+          var begin = (($scope.currentPage - 1) * $scope.itemsPerPage),
+            end = begin + $scope.itemsPerPage;
+          $scope.reposBla = $scope.repos.slice(begin, end);
+
+        });
+
+      });
+      ///Pagination
+      // $scope.totalItems = 64;
+      $scope.currentPage = 1;
+      $scope.itemsPerPage = 3;
+
+      $scope.pageCount = function () {
+        return Math.ceil($scope.repos.length / $scope.itemsPerPage);
+      };
+
+    },
+    function (response) {
       //404 or bad
       if (response.status !== 200) {
-        dialogs.error('CONNECTION ERROR!', 'Check your Settings!');
+        dialogs.error('CONNECTION ERROR!', 'Can not connect to your registry server. Check your Settings!');
       }
     });
-
-  $scope.deleteRepo = function (name) {
-    if (popupService.showPopup('Really delete ' + name + '?')) {
-      ReposDelete.get({
-        name: name
-      });
-      $window.location.href = '';
-    }
-  }
-  ////
-  $scope.items = ['item1', 'item2', 'item3'];
-
-  $scope.open = function (size, name) {
-
-    var modalInstance = $modal.open({
-      templateUrl: 'myModalContent.html',
-      controller: 'ModalInstanceCtrl',
-      size: size,
-      resolve: {
-        items: function () {
-          return $scope.items;
-        },
-        name: function () {
-          console.log('Size: ' + size + ' und Repo: ' + name);
-          return name;
-        }
-      }
-    });
-
-    modalInstance.result.then(function (selectedItem) {
-      $scope.selected = selectedItem;
-    }, function () {
-      $log.info('Modal dismissed at: ' + new Date());
-    });
-  }
-  ///Pagination
-  $scope.totalItems = 64;
-  $scope.currentPage = 1;
-
-  $scope.setPage = function (pageNo) {
-    $scope.currentPage = pageNo;
-  };
-
-  $scope.pageChanged = function () {
-    console.log('Page changed to: ' + $scope.currentPage);
-  };
-
-  $scope.maxSize = 5;
-  $scope.bigTotalItems = 175;
-  $scope.bigCurrentPage = 1;
-
-
 })
+
 
 .controller('ModalInstanceCtrl', function ($scope, $modalInstance, items, name) {
 

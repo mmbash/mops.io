@@ -113,7 +113,7 @@ app.get(config.LISTAPPS, function getApps(req, res) {
 // get infos of a running app
 app.get(config.GETINFOSAPP, function getAppInfo(req, res) {
   console.log('Get info of app: ' + req.params.id);
-  req.pipe(request.get(marathonip + config.MARATHONGETINFOSAPP + req.params.id, function (error, response, body) {
+  req.pipe(request.get(marathonip + config.MARATHONGETINFOSAPP + req.param("id"), function (error, response, body) {
     if (error) {
       console.error('Connection error: ' + error.code);
     }

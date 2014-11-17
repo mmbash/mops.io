@@ -26,6 +26,7 @@ exports.GETINFOSAPP = '/v1/apps/:id';
 exports.MARATHONHOST = 'http://mesosmaster01:8080';
 //exports.MARATHONHOST = 'http://192.168.1.180:8080';
 
+
 exports.MARATHONLISTAPPS = '/v2/apps';
 exports.MARATHONDEPLOYAPP = '/v2/apps';
 exports.MARATHONDELETEAPP = '/v2/apps/';

@@ -15,7 +15,7 @@ var marathonip = getIp();
 
 db.serialize(function () {
   db.run("CREATE TABLE IF NOT EXISTS settings (marathon TEXT, registry TEXT, id INT)");
-  db.run("REPLACE INTO settings (marathon, registry, id) VALUES('http://192.168.1.180:8080/','http://192.168.1.188:5000/','1')");
+  db.run("REPLACE INTO settings (marathon, registry, id) VALUES('http://mesosmaster01:8080/','http://192.168.1.188:5000/','1')");
 });
 
 function getIp(req, res) {

@@ -9,7 +9,7 @@ var port = process.env.PORT_RUNTIME || process.env.PORT || 3000;
 var request = require('request');
 var config = require('./config.js');
 var sqlite3 = require('sqlite3').verbose();
-var db = new sqlite3.Database('./sqlite/mopsidb1');
+var db = new sqlite3.Database('./sqlite/mopsidb1'); << << << < HEAD
 /*var registryip = getIp();
 var marathonip = getIp();*/
 
@@ -188,22 +188,27 @@ app.get(config.DOCKERLOG, function getDockerLog(req, res) {
 // get running docker containers
 app.get(config.DOCKERLIST, function getDockerLog(req, res) {
   console.log('Get all containers');
+  var target = {};
+  var target1;
+  var target2;
+  var stream2 = req.pipe(request.get(config.DOCKERHOST1 + config.DOCKERLIST, function (error, response, body) {
+    target2 = body;
+  }));
 
-  var combinedStream = CombinedStream.create();
+  var stream1 = req.pipe(request.get(config.DOCKERHOST2 + config.DOCKERLIST, function (error, response, body) {
+    target1 = body;
+  }));
 
-  combinedStream.append(req.pipe(request.get(config.DOCKERHOST1 + config.DOCKERLIST, function (error, response, body) {
-    if (error) {
-      console.error('Connection error: ' + error.code);
-    }
-  })));
+  stream1.on('end', function () {
+    console.log("Stream1 end");
+    console.log(target1);
+  });
 
-  combinedStream.append(req.pipe(request.get(config.DOCKERHOST2 + config.DOCKERLIST, function (error, response, body) {
-    if (error) {
-      console.error('Connection error: ' + error.code);
-    }
-  })));
-
-  combinedStream.pipe(res);
+  stream2.on('end', function () {
+    console.log("Stream2 end");
+    console.log(target2);
+  });
+  /*res.send(target);*/
 });
 
 app.use(express.static(__dirname + '/public'));

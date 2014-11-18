@@ -18,10 +18,10 @@ var docker = require('dockerode');
 var Mesos = require('./mesos.js');
 var mesos = new Mesos ('http://mesosmaster01:5050');
 
-
 db.serialize(function () {
   db.run("CREATE TABLE IF NOT EXISTS settings (marathon TEXT, registry TEXT, id INT)");
-  db.run("REPLACE INTO settings (marathon, registry, id) VALUES('http://mesosmaster01:8080/','http://192.168.1.188:5000/','1')");
+  db.run("REPLACE INTO settings (marathon, registry, id) VALUES('http://192.168.1.180:8080','http://192.168.1.188:5000','1')");
+  getIp();
 });
 
 function getIp(req, res) {
@@ -46,7 +46,6 @@ app.get('/settings', function (req, res) {
     });
   });
 });
-
 
 app.post('/settings', function (req, res) {
   db.run("UPDATE settings SET marathon='" + req.param("marathon") + "', registry='" + req.param("registry") + "' WHERE id='1'", function (error, row) {
@@ -85,9 +84,20 @@ app.get('/v1/deleterepos/:name', function (req, res, next) {
 });
 
 // TAGS
-app.get('/v1/tags', function getTags(req, res) {
+app.get('/v1/tags', function (req, res) {
   console.log('Get tags');
   req.pipe(request.get(registryip + config.REGREPOSTAGS + req.param("name") + '/tags', function (error, response, body) {
+    console.log('[' + new Date() + '] ', req.url);
+    if (error) {
+      console.error('Connection error: ' + error.code);
+    }
+  })).pipe(res);
+});
+
+// DELETE TAGS
+app.get('/v1/deletetags', function (req, res) {
+  console.log('Delete tag');
+  req.pipe(request.del(registryip + config.REGREPOSTAGS + req.param("reponame") + '/tags/' + req.param("tag"), function (error, response, body) {
     console.log('[' + new Date() + '] ', req.url);
     if (error) {
       console.error('Connection error: ' + error.code);
@@ -126,7 +136,7 @@ app.get(config.GETINFOSAPP, function getAppInfo(req, res) {
   })).pipe(res);
 });
 
-// stop a app
+// delete a app
 app.delete(config.DELETEAPP, function deleteApps(req, res) {
   console.log('Delete an app');
   req.pipe(request.del(marathonip + config.MARATHONDELETEAPP + req.params.id, function (error, response, body) {
@@ -193,6 +203,7 @@ app.get(config.DOCKERLOG, function getDockerLog(req, res) {
 // get running docker containers
 app.get(config.DOCKERLIST, function getDockerContainers(req, res) {
   console.log('Get all containers');
+<<<<<<< HEAD
 	mesos.getAllSlaves(loopThroughDockerHosts); 
 	
 	function loopThroughDockerHosts(dockerHosts) {
@@ -229,6 +240,29 @@ app.get('/v1/getslaves', function getMesosSlaves(req, res) {
   mesos.getAllSlaves(function logSlaves(body) {
     res.send(body);
 	});	    
+=======
+  var target = {};
+  var target1;
+  var target2;
+  var stream2 = req.pipe(request.get(config.DOCKERHOST1 + config.DOCKERLIST, function (error, response, body) {
+    target2 = body;
+  }));
+
+  var stream1 = req.pipe(request.get(config.DOCKERHOST2 + config.DOCKERLIST, function (error, response, body) {
+    target1 = body;
+  }));
+
+  stream1.on('end', function () {
+    console.log("Stream1 end");
+    console.log(target1);
+  });
+
+  stream2.on('end', function () {
+    console.log("Stream2 end");
+    console.log(target2);
+  });
+  /*res.send(target);*/
+>>>>>>> e189025f876a2af629e8f38d74a75af7dfc2547f
 });
 
 app.use(express.static(__dirname + '/public'));

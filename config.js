@@ -6,9 +6,9 @@
 //exports.REGISTRYHOST = 'http://192.168.1.188:5000/v1';
 exports.REGISTRYHOST = 'http://127.0.0.1:5000/v1';
 
-exports.REGLISTREPOS = 'v1/search';
-exports.REGREPOSTAGS = 'v1/repositories/';
-exports.REG_IMAGE_LAYER = 'v1/images/';
+exports.REGLISTREPOS = '/v1/search';
+exports.REGREPOSTAGS = '/v1/repositories/';
+exports.REG_IMAGE_LAYER = '/v1/images/';
 
 exports.REGCHANGEAPP = '/v1/apps/:id';
 exports.REGGETINFOSAPP = '/v1/apps/:id';

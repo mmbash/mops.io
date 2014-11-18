@@ -1,5 +1,10 @@
 angular.module('mopsiApp.services', [])
 
+var underscore = angular.module('underscore', []);
+underscore.factory('_', function () {
+  return window._; // assumes underscore has already been loaded on the page
+})
+
 
 // Global Timeout for connection errors
 .factory('timeoutHttpIntercept', function ($rootScope, $q) {
@@ -35,7 +40,7 @@ angular.module('mopsiApp.services', [])
     name: '@_name'
   }, {
     query: {
-      method: "GET",
+      method: "DELETE",
       isArray: false
     }
   });
@@ -48,6 +53,19 @@ angular.module('mopsiApp.services', [])
     query: {
       method: "GET",
       isArray: true
+    }
+  });
+})
+
+.factory('TagDelete', function ($resource) {
+  return $resource('/v1/deletetags', {
+    reponame: '@_name',
+    tag: ' @_tag'
+
+  }, {
+    query: {
+      method: "GET",
+      isArray: false
     }
   });
 })
@@ -97,15 +115,17 @@ angular.module('mopsiApp.services', [])
 })
 
 .factory('AppKill', function ($resource) {
-  return $resource('/v1/apps', {
+  return $resource('/v1/apps/:id', {
     id: '@id'
   }, {
-    query: {
-      method: "GET",
-      isArray: true
+    delete: {
+      method: "DELETE",
+      isArray: false
     }
   });
-}).factory('AppDeploy', function ($resource) {
+})
+
+.factory('AppDeploy', function ($resource) {
   return $resource('/v1/apps', {
     tag: 'tag'
   }, {
@@ -117,29 +137,6 @@ angular.module('mopsiApp.services', [])
 })
 
 // AAAAAAAAAAAAAAAAAAAAAAAAAAAAALLLLLLLLLLLLLLLLLLT
-
-.factory('Image', function ($resource) {
-  return $resource('http://cors-proxy.mops.io/192.168.1.188:5000/v1/repositories/:name/tags', {
-    //return $resource('../tags.json', {
-    tags: '@_tags'
-  }, {
-    query: {
-      method: "GET",
-      isArray: true
-    }
-  });
-})
-  .factory('Details', function ($resource) {
-    //        return $resource('http://192.168.1.188:5000/v1/repositories/:name/tags', {
-    return $resource('../details.json', {
-      name: '@_name'
-    }, {
-      query: {
-        method: "GET",
-        isArray: true
-      }
-    });
-  })
 
 .service('popupService', function ($window) {
   this.showPopup = function (message) {

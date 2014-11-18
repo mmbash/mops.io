@@ -1,13 +1,26 @@
+<div class="row">
+  <!--<div class="col-xs-4">
+  <h3>Repos: {{ currentPage }}</h3>
+</div>-->
+  <div class="col-xs-4">
+    <label for="search">Search:</label>
+    <input ng-model="search" id="search" class="form-control" placeholder="Search">
+  </div>
+  <div class="col-xs-4">
+    <label for="search">Items per page:</label>
+    <input type="number" min="1" max="100" class="form-control" ng-model="pageSize">
+  </div>
+</div>
 <table class="table mopsitable">
   <tr>
     <td>
       <h3>All Repos</h3>
     </td>
-    <td></td>
+    <td>
+    </td>
   </tr>
-  <tr ng-repeat="repo in repos.results | filter:search">
+  <tr dir-paginate="repo in repos.results |filter:search| itemsPerPage: pageSize">
     <td>{{repo.name}}</td>
-    <td>{{repo.nix}}</td>
     <td>
       <a class="btn btn-primary" ui-sref="viewReposTags({name:repo.name})">Tags</a>
       <!--      <a class="btn btn-info" ng-click="open('sm',repo.name)">PopUp</a>-->
@@ -18,14 +31,8 @@
 
 </table>
 
-<pagination total-items="totalItems" items-per-page="itemsPerPage" ng-model="currentPage" ng-change="pageChanged()"></pagination>
+<dir-pagination-controls boundary-links="true" on-page-change="pageChangeHandler(newPageNumber)" template-url="partials/dirPagination.tpl.html" ]></dir-pagination-controls>
 
 <hr />
 
 <div ng-include=" 'js/modal.js' "></div>
-<p>
-  Pagination not yet working :(
-  <br>total Items: {{totalItems}}
-  <br />Items per page: {{itemsPerPage}}
-  <br />Current Page: {{currentPage}}
-</p>

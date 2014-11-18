@@ -13,3 +13,11 @@ a.nodecoration {
 table .collapse.in {
   display: table-row;
 }
+body {
+  padding-top: 60px;
+}
+@media (max-width: 979px) {
+  body {
+    padding-top: 0px;
+  }
+}

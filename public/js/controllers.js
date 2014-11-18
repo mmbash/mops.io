@@ -1,33 +1,16 @@
 angular.module('mopsiApp.controllers', [])
 
-.controller('ReposController', function ($scope, $stateParams, popupService, $window, $modal, $log, dialogs, Repos, ReposDelete) {
+.controller('ReposController', function ($scope, $stateParams, popupService, $window, $modal, $log, dialogs, Repos, ReposDelete, _) {
   $scope.repos = Repos.get({
       id: $stateParams.id
     },
     function () {
-      //good code
-      console.log('Looks good ');
-      $scope.repos.$promise.then(function (data) {
-        $scope.repos = data;
-        $scope.totalItems = $scope.repos.length;
-        $scope.$watch('currentPage + itemsPerPage', function () {
-          var begin = (($scope.currentPage - 1) * $scope.itemsPerPage),
-            end = begin + $scope.itemsPerPage;
-          $scope.reposBla = $scope.repos.slice(begin, end);
-
-        });
-
-      });
-      ///Pagination
-      // $scope.totalItems = 64;
+      //connection ok
+      //$scope.reposArray = _.toArray($scope.repos.results); //not needed anymore but still cool example for underscore.js
       $scope.currentPage = 1;
-      $scope.itemsPerPage = 3;
-
-      $scope.pageCount = function () {
-        return Math.ceil($scope.repos.length / $scope.itemsPerPage);
-      };
+      $scope.pageSize = 10;
     }, function (response) {
-      //404 or bad
+      //connection bad
       if (response.status !== 200) {
         dialogs.error('CONNECTION ERROR!', 'Can not connect to your registry server. Check your Settings!');
       }
@@ -41,9 +24,8 @@ angular.module('mopsiApp.controllers', [])
       $window.location.href = '';
     }
   }
-  ////
-  $scope.items = ['item1', 'item2', 'item3'];
 
+  $scope.items = ['item1', 'item2', 'item3'];
   $scope.open = function (size, name) {
 
     var modalInstance = $modal.open({
@@ -67,25 +49,7 @@ angular.module('mopsiApp.controllers', [])
       $log.info('Modal dismissed at: ' + new Date());
     });
   }
-  ///Pagination
-  $scope.totalItems = 64;
-  $scope.currentPage = 1;
-
-  $scope.setPage = function (pageNo) {
-    $scope.currentPage = pageNo;
-  };
-
-  $scope.pageChanged = function () {
-    console.log('Page changed to: ' + $scope.currentPage);
-  };
-
-  $scope.maxSize = 5;
-  $scope.bigTotalItems = 175;
-  $scope.bigCurrentPage = 1;
-
-
 })
-
 
 .controller('ModalInstanceCtrl', function ($scope, $modalInstance, items, name) {
 
@@ -105,13 +69,22 @@ angular.module('mopsiApp.controllers', [])
   };
 })
 
-.controller('ReposTagsController', function ($scope, $stateParams, ReposTags) {
+.controller('ReposTagsController', function ($scope, $stateParams, popupService, $window, $modal, ReposTags, TagDelete) {
   $scope.reponame = $stateParams.name;
   console.log('Tags ' + $stateParams.name);
 
   $scope.tags = ReposTags.get({
     name: $stateParams.name
   });
+  $scope.deleteTag = function (tag, reponame) {
+    if (popupService.showPopup('Really delete ' + reponame + ':' + tag + '?')) {
+      TagDelete.get({
+        reponame: reponame,
+        tag: tag
+      });
+      $window.location.href = '';
+    }
+  }
 })
 
 .controller('ImageLayerController', function ($scope, $stateParams, ImageLayer) {
@@ -138,16 +111,28 @@ angular.module('mopsiApp.controllers', [])
     $scope.loadSettings();
   })
 
-.controller('AppsController', function ($scope, $stateParams, popupService, $window, Apps, AppKill) {
-  $scope.apps = Apps.get({
-    id: $stateParams.id
-  });
+.controller('AppsController', function ($scope, $stateParams, popupService, $window, Apps, $timeout, $interval, AppKill) {
+
+  $scope.intervalApps = function () {
+    $timeout(function () {
+      Apps.get({
+        id: $stateParams.id
+      }, function (data) {
+        $scope.apps = data;
+        $scope.intervalApps();
+      }, 5000);
+    });
+  }
+  $scope.intervalApps();
+
   $scope.appKill = function (name) {
     if (popupService.showPopup('Really kill ' + name + '?')) {
-      AppKill.get({
-        name: name
+      AppKill.delete({
+        id: name,
       });
-      $window.location.href = '';
+      console.log('Killing ' + name);
+      $scope.$apply;
+      $window.location.href = '#/apps';
     }
   }
 })

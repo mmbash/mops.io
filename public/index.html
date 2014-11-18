@@ -17,20 +17,26 @@
     <div class="container-fluid">
       <div class="navbar-header">
         <a class="navbar-brand" ui-sref="movies">
-          <img src="images/mops349x300.jpg" height="50" class="img-circle">mops.io Beta</a>
+          <img src="images/mops349x300.jpg" height="50" class="img-circle" title="Meow, Meow ;)">mops.io Beta</a>
       </div>
       <div class="collapse navbar-collapse">
         <ul class="nav navbar-nav">
-          <li class="active"><a ui-sref="viewRepos">Home</a>
+          <li>
+
+            <a ui-sref="viewRepos">
+              <img src="images/official-repository-icon.png" height="50" class="img-circle">Repositories
+            </a>
           </li>
-          <li class=""><a ui-sref="apps">Apps</a>
+          <li class="">
+            <a ui-sref="apps">
+              <img src="images/marathon-logo.png" height="50" class="img-circle">Marathon Apps</a>
           </li>
 
         </ul>
         <form class="navbar-form navbar-right" role="search">
-          <div class="form-group">
+          <!--          <div class="form-group">
             <input type="text" class="form-control" placeholder="Search" ng-model="search">
-          </div>
+          </div>-->
           <a class="btn btn-success" ui-sref="Settings()">Settings</a>
         </form>
       </div>
@@ -55,11 +61,12 @@
   <script type="text/javascript" src="js/filters.js"></script>
   <script type="text/javascript" src="lib/angular-ui-router.js"></script>
   <script type="text/javascript" src="lib/angular-resource.min.js"></script>
-  <script src="lib/angular-datatables.min.js"></script>
   <script src="lib/ui-bootstrap-0.11.2.min.js"></script>
   <script src="lib/ui-bootstrap-tpls-0.11.2.min.js"></script>
   <script type="text/javascript" src="lib/dialogs.js"></script>
   <script src="//code.angularjs.org/1.3.0/angular-sanitize.min.js"></script>
+  <script src="lib/underscore-min.js"></script>
+  <script src="lib/dirPagination.js"></script>
 </body>
 
 </html>

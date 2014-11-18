@@ -79,9 +79,20 @@ app.get('/v1/deleterepos/:name', function (req, res, next) {
 });
 
 // TAGS
-app.get('/v1/tags', function getTags(req, res) {
+app.get('/v1/tags', function (req, res) {
   console.log('Get tags');
   req.pipe(request.get(registryip + config.REGREPOSTAGS + req.param("name") + '/tags', function (error, response, body) {
+    console.log('[' + new Date() + '] ', req.url);
+    if (error) {
+      console.error('Connection error: ' + error.code);
+    }
+  })).pipe(res);
+});
+
+// DELETE TAGS
+app.get('/v1/deletetags', function (req, res) {
+  console.log('Delete tag');
+  req.pipe(request.del(registryip + config.REGREPOSTAGS + req.param("reponame") + '/tags/' + req.param("tag"), function (error, response, body) {
     console.log('[' + new Date() + '] ', req.url);
     if (error) {
       console.error('Connection error: ' + error.code);

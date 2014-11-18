@@ -69,13 +69,22 @@ angular.module('mopsiApp.controllers', [])
   };
 })
 
-.controller('ReposTagsController', function ($scope, $stateParams, ReposTags) {
+.controller('ReposTagsController', function ($scope, $stateParams, popupService, $window, $modal, ReposTags, TagDelete) {
   $scope.reponame = $stateParams.name;
   console.log('Tags ' + $stateParams.name);
 
   $scope.tags = ReposTags.get({
     name: $stateParams.name
   });
+  $scope.deleteTag = function (tag, reponame) {
+    if (popupService.showPopup('Really delete ' + reponame + ':' + tag + '?')) {
+      TagDelete.get({
+        reponame: reponame,
+        tag: tag
+      });
+      $window.location.href = '';
+    }
+  }
 })
 
 .controller('ImageLayerController', function ($scope, $stateParams, ImageLayer) {
@@ -102,10 +111,16 @@ angular.module('mopsiApp.controllers', [])
     $scope.loadSettings();
   })
 
-.controller('AppsController', function ($scope, $stateParams, popupService, $window, Apps, AppKill) {
-  $scope.apps = Apps.get({
-    id: $stateParams.id
-  });
+.controller('AppsController', function ($scope, $stateParams, popupService, $window, Apps, $timeout, $interval, AppKill) {
+
+
+  $timeout(function () {
+    $scope.apps = Apps.get({
+      id: $stateParams.id
+    });
+    //    $scope.apps = update;
+  }, 5000);
+
   $scope.appKill = function (name) {
     if (popupService.showPopup('Really kill ' + name + '?')) {
       AppKill.get({

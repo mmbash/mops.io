@@ -18,10 +18,6 @@ angular.module('mopsiApp').config(function ($stateProvider, $httpProvider) {
       url: '/repos/:name/image/:id/layer',
       templateUrl: 'partials/image-details.html',
       controller: 'ImageLayerController'
-    }).state('viewMovie', {
-      url: '/movies/:name/view',
-      templateUrl: 'partials/image-details.html',
-      controller: 'MovieViewController'
     }).state('viewTags', {
       url: '/image/:name/tags',
       templateUrl: 'partials/image-tags.html',
@@ -30,14 +26,6 @@ angular.module('mopsiApp').config(function ($stateProvider, $httpProvider) {
       url: '/image/:reponame/:tag/deploy',
       templateUrl: 'partials/app-deploy.html',
       controller: 'AppDeployController'
-    }).state('newMovie', {
-      url: '/movies/new',
-      templateUrl: 'partials/movie-add.html',
-      controller: 'MovieCreateController'
-    }).state('editMovie', {
-      url: '/movies/:id/edit',
-      templateUrl: 'partials/movie-edit.html',
-      controller: 'MovieEditController'
     }).state('appDetails', {
       url: '/apps/:id/details',
       templateUrl: 'partials/app-details.html',

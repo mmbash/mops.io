@@ -40,7 +40,7 @@ underscore.factory('_', function () {
     name: '@_name'
   }, {
     query: {
-      method: "GET",
+      method: "DELETE",
       isArray: false
     }
   });
@@ -53,6 +53,19 @@ underscore.factory('_', function () {
     query: {
       method: "GET",
       isArray: true
+    }
+  });
+})
+
+.factory('TagDelete', function ($resource) {
+  return $resource('/v1/deletetags', {
+    reponame: '@_name',
+    tag: ' @_tag'
+
+  }, {
+    query: {
+      method: "GET",
+      isArray: false
     }
   });
 })

@@ -120,7 +120,7 @@ underscore.factory('_', function () {
   }, {
     delete: {
       method: "DELETE",
-      isArray: true
+      isArray: false
     }
   });
 })

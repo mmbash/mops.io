@@ -113,13 +113,17 @@ angular.module('mopsiApp.controllers', [])
 
 .controller('AppsController', function ($scope, $stateParams, popupService, $window, Apps, $timeout, $interval, AppKill) {
 
-
-  $timeout(function () {
-    $scope.apps = Apps.get({
-      id: $stateParams.id
+  $scope.intervalApps = function () {
+    $timeout(function () {
+      Apps.get({
+        id: $stateParams.id
+      }, function (data) {
+        $scope.apps = data;
+        $scope.intervalApps();
+      }, 5000);
     });
-    //    $scope.apps = update;
-  }, 5000);
+  }
+  $scope.intervalApps();
 
   $scope.appKill = function (name) {
     if (popupService.showPopup('Really kill ' + name + '?')) {
@@ -127,7 +131,8 @@ angular.module('mopsiApp.controllers', [])
         id: name,
       });
       console.log('Killing ' + name);
-      $window.location.href = '';
+      $scope.$apply;
+      $window.location.href = '#/apps';
     }
   }
 })

@@ -34,8 +34,10 @@ exports.MARATHONCHANGEAPP = '/v2/apps/';
 exports.MARATHONGETINFOSAPP = '/v2/apps/';
 
 // docker stuff
+exports.DOCKERHOSTARRAY = [ 'http://mesosmaster02:4243', 'http://mesosmaster01:4243' ];
 exports.DOCKERHOST1 = 'http://mesosmaster02:4243';
-exports.DOCKERHOST2 = 'http://mesosmaster01:4243';
+exports.DOCKERHOST2 = 'http://mesosmaster02:4243';
+exports.DOCKERPORT = '4243';
 exports.DOCKERLOG = '/containers/:id/logs';
 exports.DOCKERLIST = '/containers/json';
 exports.DOCKERLOGPART1 = '/containers/';

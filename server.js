@@ -13,6 +13,11 @@ var db = new sqlite3.Database('./sqlite/mopsidb1');
 var registryip = getIp();
 var marathonip = getIp();
 var _ = require('underscore');
+var async = require('async');
+var docker = require('dockerode');
+var Mesos = require('./mesos.js');
+var mesos = new Mesos ('http://mesosmaster01:5050');
+
 
 db.serialize(function () {
   db.run("CREATE TABLE IF NOT EXISTS settings (marathon TEXT, registry TEXT, id INT)");
@@ -186,29 +191,44 @@ app.get(config.DOCKERLOG, function getDockerLog(req, res) {
 });
 
 // get running docker containers
-app.get(config.DOCKERLIST, function getDockerLog(req, res) {
+app.get(config.DOCKERLIST, function getDockerContainers(req, res) {
   console.log('Get all containers');
-  var target = {};
-	var target1;
-	var target2;
-	var stream2 = req.pipe(request.get(config.DOCKERHOST1 + config.DOCKERLIST, function (error, response, body) {
-    target2 = body;
-  }));
+	mesos.getAllSlaves(loopThroughDockerHosts); 
+	
+	function loopThroughDockerHosts(dockerHosts) {
+		var asyncTasks = [];
+		for (var i=0; i<dockerHosts.length; i++) {
+			(function(i) {
+				asyncTasks.push(
+					function(callback) {
+						req.pipe(request.get('http://'+ dockerHosts[i] + ':' + config.DOCKERPORT + config.DOCKERLIST,function getContent(err, response, body){
+						console.log(body);
+						callback(err,body);
+						}))
+					}
+				)
+			})(i);
+		}
+    connectToDockerHosts(asyncTasks);
+  };
 
-  var stream1 = req.pipe(request.get(config.DOCKERHOST2 + config.DOCKERLIST, function (error, response, body) {
-    target1 = body;
-  }));
-
-  stream1.on('end',function () {
-		console.log("Stream1 end");
-    console.log(target1);
-  });
+  function connectToDockerHosts(asyncTasks) {
+  	async.parallel(asyncTasks,appendToResult);
+	};
   
-  stream2.on('end',function () {
-		console.log("Stream2 end");
-    console.log(target2);
-  });
-  /*res.send(target);*/
+	function appendToResult(err,results) {
+		 res.send(results);
+  };
+
+});
+
+// get all mesos slaves
+app.get('/v1/getslaves', function getMesosSlaves(req, res) {
+  console.log('Get all mesoslaves');
+  var mesos = new Mesos ('http://mesosmaster01:5050');
+  mesos.getAllSlaves(function logSlaves(body) {
+    res.send(body);
+	});	    
 });
 
 app.use(express.static(__dirname + '/public'));

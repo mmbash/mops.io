@@ -203,7 +203,6 @@ app.get(config.DOCKERLOG, function getDockerLog(req, res) {
 // get running docker containers
 app.get(config.DOCKERLIST, function getDockerContainers(req, res) {
   console.log('Get all containers');
-<<<<<<< HEAD
 	mesos.getAllSlaves(loopThroughDockerHosts); 
 	
 	function loopThroughDockerHosts(dockerHosts) {
@@ -240,7 +239,6 @@ app.get('/v1/getslaves', function getMesosSlaves(req, res) {
   mesos.getAllSlaves(function logSlaves(body) {
     res.send(body);
 	});	    
-=======
   var target = {};
   var target1;
   var target2;
@@ -262,7 +260,6 @@ app.get('/v1/getslaves', function getMesosSlaves(req, res) {
     console.log(target2);
   });
   /*res.send(target);*/
->>>>>>> e189025f876a2af629e8f38d74a75af7dfc2547f
 });
 
 app.use(express.static(__dirname + '/public'));

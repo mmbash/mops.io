@@ -1,5 +1,10 @@
 angular.module('mopsiApp.services', [])
 
+var underscore = angular.module('underscore', []);
+underscore.factory('_', function () {
+  return window._; // assumes underscore has already been loaded on the page
+})
+
 
 // Global Timeout for connection errors
 .factory('timeoutHttpIntercept', function ($rootScope, $q) {

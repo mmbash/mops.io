@@ -9,7 +9,7 @@ var port = process.env.PORT_RUNTIME || process.env.PORT || 3000;
 var request = require('request');
 var config = require('./config.js');
 var sqlite3 = require('sqlite3').verbose();
-var db = new sqlite3.Database('./sqlite/mopsidb1'); << << << < HEAD
+var db = new sqlite3.Database('./sqlite/mopsidb1');
 /*var registryip = getIp();
 var marathonip = getIp();*/
 
@@ -41,7 +41,6 @@ app.get('/settings', function (req, res) {
     });
   });
 });
-
 
 app.post('/settings', function (req, res) {
   db.run("UPDATE settings SET marathon='" + req.param("marathon") + "', registry='" + req.param("registry") + "' WHERE id='1'", function (error, row) {

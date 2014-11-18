@@ -131,7 +131,7 @@ app.get(config.GETINFOSAPP, function getAppInfo(req, res) {
   })).pipe(res);
 });
 
-// stop a app
+// delete a app
 app.delete(config.DELETEAPP, function deleteApps(req, res) {
   console.log('Delete an app');
   req.pipe(request.del(marathonip + config.MARATHONDELETEAPP + req.params.id, function (error, response, body) {

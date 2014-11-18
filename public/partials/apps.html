@@ -36,7 +36,7 @@
       <td>{{app.container.docker.image}}</td>
       <td>
         <a class="btn btn-primary" ui-sref="appDetails({id:app.id})">Details</a>
-        <a class="btn btn-danger" ng-click="deleteApp(app)">Kill!</a>
+        <a class="btn btn-danger" ng-click="appKill(app.id)">Kill!</a>
       </td>
     </tr>
 

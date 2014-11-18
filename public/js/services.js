@@ -119,7 +119,7 @@ underscore.factory('_', function () {
     id: '@id'
   }, {
     query: {
-      method: "GET",
+      method: "DELETE",
       isArray: true
     }
   });

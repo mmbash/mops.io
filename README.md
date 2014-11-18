@@ -1,6 +1,6 @@
 mops.io
 =======
-Docker Registry and Mesosphere/Marathon API Server which will work also with mopsicli (WIP). 
+Docker Registry and Mesosphere/Marathon API Server which will also work with [mopsicli](https://github.com/mmbash/mopsicli) (in development). 
 
 mopsi.io provides a GUI for a private docker registry with the capabilites to deploy a docker image tag to mesosphere/marathon. If you don't use marathon you can use it as a docker registry GUI only.
 

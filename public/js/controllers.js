@@ -123,9 +123,10 @@ angular.module('mopsiApp.controllers', [])
 
   $scope.appKill = function (name) {
     if (popupService.showPopup('Really kill ' + name + '?')) {
-      AppKill.get({
-        id: name
+      AppKill.delete({
+        id: name,
       });
+      console.log('Killing ' + name);
       $window.location.href = '';
     }
   }

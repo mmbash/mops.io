@@ -115,15 +115,17 @@ underscore.factory('_', function () {
 })
 
 .factory('AppKill', function ($resource) {
-  return $resource('/v1/apps', {
+  return $resource('/v1/apps/:id', {
     id: '@id'
   }, {
-    query: {
+    delete: {
       method: "DELETE",
       isArray: true
     }
   });
-}).factory('AppDeploy', function ($resource) {
+})
+
+.factory('AppDeploy', function ($resource) {
   return $resource('/v1/apps', {
     tag: 'tag'
   }, {
@@ -135,29 +137,6 @@ underscore.factory('_', function () {
 })
 
 // AAAAAAAAAAAAAAAAAAAAAAAAAAAAALLLLLLLLLLLLLLLLLLT
-
-.factory('Image', function ($resource) {
-  return $resource('http://cors-proxy.mops.io/192.168.1.188:5000/v1/repositories/:name/tags', {
-    //return $resource('../tags.json', {
-    tags: '@_tags'
-  }, {
-    query: {
-      method: "GET",
-      isArray: true
-    }
-  });
-})
-  .factory('Details', function ($resource) {
-    //        return $resource('http://192.168.1.188:5000/v1/repositories/:name/tags', {
-    return $resource('../details.json', {
-      name: '@_name'
-    }, {
-      query: {
-        method: "GET",
-        isArray: true
-      }
-    });
-  })
 
 .service('popupService', function ($window) {
   this.showPopup = function (message) {

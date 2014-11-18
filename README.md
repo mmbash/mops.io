@@ -13,7 +13,7 @@ node-easy can clone git repos, does a npm install and starts server.js with node
 
 mopsi.io is then available at http://dockerhost:3000/
 
-![user-interface-repos](https://github.com/mmbash/mops.io/blob/gh-pages/images/repos.PNG)
+![user-interface-repos](https://cloud.githubusercontent.com/assets/8025931/5088659/d7620c52-6f35-11e4-967d-0a4c6d1af897.PNG)
 
 
 

@@ -8,7 +8,7 @@ mopsi.io provides a GUI for a private docker registry with the capabilites to de
 ### Start with pure docker
 
 ```bash
-docker run -it -e “APP_NAME=server.js” -e “GIT=https://github.com/mmbash/mops.io” -p 3000:3000 mikemichel/node-easy /bin/sh /tmp/gitmon.sh 
+docker run -it -e "APP_NAME=server.js" -e "GIT=https://github.com/mmbash/mops.io" -p 3000:3000 mikemichel/node-easy /bin/sh /tmp/gitmon.sh 
 ```
 
 [node-easy](https://registry.hub.docker.com/u/mikemichel/node-easy/) can clone git repos, does a npm install and starts server.js with nodemon

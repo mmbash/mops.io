@@ -10,8 +10,13 @@ var request = require('request');
 var config = require('./config.js');
 var sqlite3 = require('sqlite3').verbose();
 var db = new sqlite3.Database('./sqlite/mopsidb1');
-/*var registryip = getIp();
-var marathonip = getIp();*/
+var registryip = getIp();
+var marathonip = getIp();
+var _ = require('underscore');
+var async = require('async');
+var docker = require('dockerode');
+var Mesos = require('./mesos.js');
+var mesos = new Mesos ('http://mesosmaster01:5050');
 
 db.serialize(function () {
   db.run("CREATE TABLE IF NOT EXISTS settings (marathon TEXT, registry TEXT, id INT)");
@@ -196,8 +201,46 @@ app.get(config.DOCKERLOG, function getDockerLog(req, res) {
 });
 
 // get running docker containers
-app.get(config.DOCKERLIST, function getDockerLog(req, res) {
+app.get(config.DOCKERLIST, function getDockerContainers(req, res) {
   console.log('Get all containers');
+<<<<<<< HEAD
+	mesos.getAllSlaves(loopThroughDockerHosts); 
+	
+	function loopThroughDockerHosts(dockerHosts) {
+		var asyncTasks = [];
+		for (var i=0; i<dockerHosts.length; i++) {
+			(function(i) {
+				asyncTasks.push(
+					function(callback) {
+						req.pipe(request.get('http://'+ dockerHosts[i] + ':' + config.DOCKERPORT + config.DOCKERLIST,function getContent(err, response, body){
+						console.log(body);
+						callback(err,body);
+						}))
+					}
+				)
+			})(i);
+		}
+    connectToDockerHosts(asyncTasks);
+  };
+
+  function connectToDockerHosts(asyncTasks) {
+  	async.parallel(asyncTasks,appendToResult);
+	};
+  
+	function appendToResult(err,results) {
+		 res.send(results);
+  };
+
+});
+
+// get all mesos slaves
+app.get('/v1/getslaves', function getMesosSlaves(req, res) {
+  console.log('Get all mesoslaves');
+  var mesos = new Mesos ('http://mesosmaster01:5050');
+  mesos.getAllSlaves(function logSlaves(body) {
+    res.send(body);
+	});	    
+=======
   var target = {};
   var target1;
   var target2;
@@ -219,6 +262,7 @@ app.get(config.DOCKERLIST, function getDockerLog(req, res) {
     console.log(target2);
   });
   /*res.send(target);*/
+>>>>>>> e189025f876a2af629e8f38d74a75af7dfc2547f
 });
 
 app.use(express.static(__dirname + '/public'));

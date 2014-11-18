@@ -1,4 +1,17 @@
-<table datatable="ng" class="row-border hover table mopsitable" dt-options="dtOptions" dt-columns="dtColumns" class="table table-striped table-bordered">
+<div class="row">
+  <!--<div class="col-xs-4">
+  <h3>Apps: {{ currentPage }}</h3>
+</div>-->
+  <div class="col-xs-4">
+    <label for="search">Search:</label>
+    <input ng-model="search" id="search" class="form-control" placeholder="Search">
+  </div>
+  <div class="col-xs-4">
+    <label for="search">Items per page:</label>
+    <input type="number" min="1" max="100" class="form-control" ng-model="pageSize">
+  </div>
+</div>
+<table class="row-border hover table mopsitable" class="table table-striped table-bordered">
   <thead>
     <tr>
       <!--            <th></th>-->
@@ -11,7 +24,7 @@
     </tr>
   </thead>
   <tbody>
-    <tr ng-repeat="app in apps.apps | filter:search">
+    <tr dir-paginate="app in apps.apps |filter:search| itemsPerPage: pageSize">
       <!--
             <td><i class="glyphicon glyphicon-plus"></i>
             </td>
@@ -29,7 +42,7 @@
 
   </tbody>
 </table>
-
+<dir-pagination-controls boundary-links="true" on-page-change="pageChangeHandler(newPageNumber)" template-url="partials/dirPagination.tpl.html" ]></dir-pagination-controls>
 <!--<p>
   <button class="btn btn-default btn-sm" ng-click="status.open = !status.open">Toggle last panel</button>
   <button class="btn btn-default btn-sm" ng-click="status.isFirstDisabled = ! status.isFirstDisabled">Enable / Disable first panel</button>

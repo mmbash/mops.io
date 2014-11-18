@@ -119,7 +119,7 @@ angular.module('mopsiApp.controllers', [])
         id: $stateParams.id
       }, function (data) {
         $scope.apps = data;
-        $scope.intervalApps();
+        //$scope.intervalApps();
       }, 5000);
     });
   }

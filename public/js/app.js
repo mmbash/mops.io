@@ -1,4 +1,4 @@
-angular.module('mopsiApp', ['underscore', 'ui.bootstrap', 'dialogs.main', 'ui.router', 'ngResource', 'mopsiApp.controllers', 'mopsiApp.services', 'angularUtils.directives.dirPagination']);
+angular.module('mopsiApp', ['underscore', 'ui.bootstrap', 'dialogs.main', 'ui.router', 'ngResource', 'mopsiApp.controllers', 'mopsiApp.services', 'angularUtils.directives.dirPagination', 'ngAnimate']);
 
 angular.module('mopsiApp').config(function ($stateProvider, $httpProvider) {
   $stateProvider

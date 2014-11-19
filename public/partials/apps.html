@@ -16,7 +16,7 @@
     <tr>
       <!--            <th></th>-->
       <th>ID</th>
-      <th>Instances</th>
+      <th>Tasks/Instances</th>
       <th>Memory</th>
       <th>CPU</th>
       <th>Image</th>
@@ -30,7 +30,7 @@
             </td>
 -->
       <td>{{app.id}}</td>
-      <td>{{app.instances}}</td>
+      <td>{{app.tasksRunning}}/{{app.instances}}</td>
       <td>{{app.mem}}</td>
       <td>{{app.cpus}}</td>
       <td>{{app.container.docker.image}}</td>

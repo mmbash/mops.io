@@ -7,7 +7,7 @@
       <h3>{{reponame}}</h3>
     </td>
   </tr>
-  <tr class="animate" ng-repeat="(tag, id) in tags | filter:search">
+  <tr ng-repeat="(tag, id) in tags | filter:search">
     <td>{{tag}}</td>
     <td>{{id}}</td>
     <td>

@@ -7,13 +7,13 @@
       <h3>{{reponame}}</h3>
     </td>
   </tr>
-  <tr ng-repeat="(tag, id) in tags | filter:search">
+  <tr class="animate" ng-repeat="(tag, id) in tags | filter:search">
     <td>{{tag}}</td>
     <td>{{id}}</td>
     <td>
       <a class="btn btn-primary" ui-sref="viewImageLayer({id:id})">Layer</a>
       <a class="btn btn-info" ui-sref="viewAppDeploy({tag:tag,reponame:reponame})">Deploy</a>
-      <a class="btn btn-danger" ng-click="deleteTag(tag,reponame)">Delete</a>
+      <a class="btn btn-danger" ng-click="deleteTag(tag,reponame,$index)">Delete</a>
     </td>
   </tr>
 </table>

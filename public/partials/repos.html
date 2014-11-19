@@ -19,7 +19,7 @@
     <td>
     </td>
   </tr>
-  <tr class="animate" dir-paginate="repo in repos.results |filter:search| itemsPerPage: pageSize">
+  <tr dir-paginate="repo in repos.results |filter:search| itemsPerPage: pageSize">
     <td>{{repo.name}}</td>
     <td>
       <a class="btn btn-primary" ui-sref="viewReposTags({name:repo.name})">Tags</a>

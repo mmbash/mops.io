@@ -89,14 +89,49 @@ Mesos.prototype.getAllContainersOfaApp = function (callback) {
 		inspectAllDockerContainers(dockerContainerOnHostMap);
 	};
 
-  function inspectAllDockerContainers(dockerContainerOnHostMap) {
-		for (var i=0; i<dockerContainerOnHostMap.length; i++) {
-			request.get('http://'+ dockerContainerOnHostMap[i].dockerHost + ':' + config.DOCKERPORT + '/containers/' + dockerContainerOnHostMap[i].dockerContainer + '/json',function getContent(err, response, body){
-				console.log(body);	
-			})
-		}
-	}
+	function test(appMapDockerContainerMap) {
+		console.log('in test');
+		console.log(appMapDockerContainerMap);
+	} 
 
+  function inspectAllDockerContainers(dockerContainerOnHostMap) {
+		var appMapDockerContainerMap = [];
+		var asyncTasks = [];
+		
+		for (var i=0; i<dockerContainerOnHostMap.length; i++) {
+			(function(i) {
+				asyncTasks.push(
+					function (callback) {
+						request.get('http://'+ dockerContainerOnHostMap[i].dockerHost + ':' + config.DOCKERPORT + '/containers/' + dockerContainerOnHostMap[i].dockerContainer + '/json',function getContent(err, response, body){
+							try {
+								data = JSON.parse(body);
+								var mesosMount = '';
+								for(var i=0; i<data.Config.Env.length;i++){
+									var res = data.Config.Env[i].split('=');
+										if (res[0] === 'MESOS_SANDBOX') {
+											mesosMount = res[1];	
+										}
+								}
+								var appName = data.Volumes[mesosMount].split('executors')[1].split('.')[0].substring(1);
+								var appMapDockerContainer = {appName:appName,dockerHost:response.request.uri.hostname,dockerId:data.Id} 
+								callback(err,appMapDockerContainer);
+							} catch (e) {
+								console.log(e);
+							}
+					})
+				}	
+			)})(i)
+		}
+		getDockerMapContainerArray(asyncTasks);
+	}
+	
+	function getDockerMapContainerArray(asyncTasks) {
+		async.parallel(asyncTasks,appendToDockerMapResult);
+	};
+	
+	function appendToDockerMapResult(err,results) {
+		callback(results);
+	}
 }
 
 module.exports = Mesos;

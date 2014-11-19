@@ -268,8 +268,7 @@ app.get('/v1/getslaves', function getMesosSlaves(req, res) {
 // debug function
 app.get('/debug', function getMesosSlaves(req, res) {
   console.log('Debug');
-	mesos.getAllContainersOfaApp(function getMesosMaster(body) {
-    console.log(body);
+	mesos.getAllContainersOfaApp(function getAllContainersOfApp(body) {
 		res.send(body);
 	});	    
 });

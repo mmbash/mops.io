@@ -4,7 +4,7 @@ Docker Registry and Mesosphere/Marathon API Server which will also work with [mo
 
 mopsi.io provides a GUI for a private docker registry with the capabilites to deploy a docker image tag to mesosphere/marathon. If you don't use marathon you can use it as a docker registry GUI only.
 
-The master branch is the development branch so you should use the latest release. When you are using docker for mopsi.io you can choose the release with the  ````GIT_TAG``` ENV.
+The master branch is the development branch so you should use the latest release. When you are using docker for mopsi.io you can choose the release with the  ```GIT_TAG``` ENV.
 
 
 ### Start with node-easy

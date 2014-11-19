@@ -19,8 +19,10 @@ mopsi.io is then available at http://yourIP:3000/
 
 #### Change the Settings
 
-![user-interface-settings](https://cloud.githubusercontent.com/assets/8025931/5108233/b3e08a46-7008-11e4-88a2-50fe87e1cda7.PNG)
+![user-interface-settings](https://cloud.githubusercontent.com/assets/8025931/5108323/7076247c-7009-11e4-954f-468134ad9054.PNG)
 
-#### And you are set
+
+and start using mopsi.io
+
 
 ![user-interface-repos](https://cloud.githubusercontent.com/assets/8025931/5088659/d7620c52-6f35-11e4-967d-0a4c6d1af897.PNG)

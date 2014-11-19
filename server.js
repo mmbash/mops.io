@@ -38,7 +38,6 @@ function getIp(req, res) {
   });
 };
 
-
 app.get('/settings', function (req, res) {
   db.get("SELECT * FROM settings WHERE id='1'", function (err, row) {
     res.json({

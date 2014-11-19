@@ -24,6 +24,7 @@ db.serialize(function () {
   getIp();
 });
 
+
 function getIp(req, res) {
   db.get('SELECT * FROM settings', function (error, row) {
     if (error !== null) {
@@ -59,6 +60,7 @@ app.post('/settings', function (req, res) {
     getIp();
   });
 });
+
 
 // REPOS
 app.get('/v1/repos', function (req, res) {

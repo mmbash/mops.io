@@ -16,7 +16,7 @@ var _ = require('underscore');
 var async = require('async');
 var docker = require('dockerode');
 var Mesos = require('./mesos.js');
-var mesos = new Mesos (['http://mesosmaster01:5050']);
+var mesos = new Mesos (['http://mesosmaster01:5050','http://mesosmaster02:5050']);
 
 db.serialize(function () {
   db.run("CREATE TABLE IF NOT EXISTS settings (marathon TEXT, registry TEXT, id INT)");
@@ -166,11 +166,34 @@ app.put(config.CHANGEAPP, function changeApps(req, res) {
   })).pipe(res);
 });
 
-// catch uncaught exception
-process.on('uncaughtException', function (err) {
-  console.error('uncaughtException: ' + err.message);
-  console.error(err.stack);
-  process.exit(1);
+// add a event subscriber
+app.post(config.ADDEVENTSUBSCRIBER, function addEventSubscriber(req, res) {
+  console.log('Add event subscriber');
+  req.pipe(request.post(marathonip + config.MARATHONADDEVENTSUBSCRIBER, function (error, response, body) {
+    if (error) {
+      console.error('Connection error: ' + error.code);
+    }
+  })).pipe(res);
+});
+
+// delete a event subscriber
+app.delete(config.DELETEEVENTSUBSCRIBER, function addEventSubscriber(req, res) {
+  console.log('Delete event subscriber');
+  req.pipe(request.post(marathonip + config.MARATHONDELETEEVENTSUBSCRIBER, function (error, response, body) {
+    if (error) {
+      console.error('Connection error: ' + error.code);
+    }
+  })).pipe(res);
+});
+
+// list event subscriber
+app.get(config.LISTEVENTSUBSCRIBER, function addEventSubscriber(req, res) {
+  console.log('List event subscriber');
+  req.pipe(request.post(marathonip + config.MARATHONLISTEVENTSUBSCRIBER, function (error, response, body) {
+    if (error) {
+      console.error('Connection error: ' + error.code);
+    }
+  })).pipe(res);
 });
 
 // get docker logs of a running app
@@ -243,9 +266,25 @@ app.get('/v1/getslaves', function getMesosSlaves(req, res) {
 // debug function
 app.get('/debug', function getMesosSlaves(req, res) {
   console.log('Debug');
-	mesos.getActiveMesosMaster(function getMesosMaster(body) {
-    res.send(body);
+	mesos.getAllContainersOfaApp(function getMesosMaster(body) {
+    console.log(body);
+		res.send(body);
 	});	    
+});
+
+//callback for mesos
+app.post('/marathoncallback',function(req,res) {
+  console.log(req.body);
+  console.log("\n");
+  /*Send 200*/
+  res.status(200).end()
+});
+
+// catch uncaught exception
+process.on('uncaughtException', function (err) {
+  console.error('uncaughtException: ' + err.message);
+  console.error(err.stack);
+  process.exit(1);
 });
 
 app.use(express.static(__dirname + '/public'));

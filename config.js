@@ -22,6 +22,11 @@ exports.DELETEAPP = '/v1/apps/:id';
 exports.CHANGEAPP = '/v1/apps/:id';
 exports.GETINFOSAPP = '/v1/apps/:id';
 
+//events
+exports.ADDEVENTSUBSCRIBER = '/v1/eventSubscriptions';
+exports.DELETEEVENTSUBSCRIBER = '/v1/eventSubscriptions';
+exports.LISTEVENTSUBSCRIBER = '/v1/eventSubscriptions';
+
 // marathon stuff
 exports.MARATHONHOST = 'http://mesosmaster01:8080';
 //exports.MARATHONHOST = 'http://192.168.1.180:8080';
@@ -32,6 +37,9 @@ exports.MARATHONDEPLOYAPP = '/v2/apps';
 exports.MARATHONDELETEAPP = '/v2/apps/';
 exports.MARATHONCHANGEAPP = '/v2/apps/';
 exports.MARATHONGETINFOSAPP = '/v2/apps/';
+exports.MARATHONADDEVENTSUBSCRIBER = '/v2/eventSubscriptions';
+exports.MARATHONDELETEEVENTSUBSCRIBER = '/v2/eventSubscriptions';
+exports.MARATHONLISTEVENTSUBSCRIBER = '/v2/eventSubscriptions';
 
 // docker stuff
 exports.DOCKERHOSTARRAY = [ 'http://mesosmaster02:4243', 'http://mesosmaster01:4243' ];

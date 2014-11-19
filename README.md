@@ -16,9 +16,3 @@ docker run -it -e "APP_NAME=server.js" -e "GIT=https://github.com/mmbash/mops.io
 mopsi.io is then available at http://dockerhost:3000/
 
 ![user-interface-repos](https://cloud.githubusercontent.com/assets/8025931/5088659/d7620c52-6f35-11e4-967d-0a4c6d1af897.PNG)
-
-
-
-
-
-

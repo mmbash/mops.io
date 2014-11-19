@@ -118,13 +118,16 @@ angular.module('mopsiApp.controllers', [])
     Apps.get({
       id: $stateParams.id
     }, function (data) {
-      $scope.apps = data;
+      $scope.appsChanged = data;
       $timeout(function () {
         $scope.intervalApps();
       }, 5000);
     });
   }
   $scope.intervalApps();
+  $scope.$watch('appsChanged', function () {
+    $scope.apps = $scope.appsChanged;
+  }, true);
 
   $scope.appKill = function (name) {
     if (popupService.showPopup('Really kill ' + name + '?')) {

@@ -114,12 +114,13 @@ angular.module('mopsiApp.controllers', [])
 .controller('AppsController', function ($scope, $stateParams, popupService, $window, Apps, $timeout, $interval, AppKill) {
 
   $scope.intervalApps = function () {
-    $timeout(function () {
-      Apps.get({
-        id: $stateParams.id
-      }, function (data) {
-        $scope.apps = data;
-        //$scope.intervalApps();
+
+    Apps.get({
+      id: $stateParams.id
+    }, function (data) {
+      $scope.apps = data;
+      $timeout(function () {
+        $scope.intervalApps();
       }, 5000);
     });
   }

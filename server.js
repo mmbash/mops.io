@@ -16,7 +16,7 @@ var _ = require('underscore');
 var async = require('async');
 var docker = require('dockerode');
 var Mesos = require('./mesos.js');
-var mesos = new Mesos (['http://mesosmaster01:5050']);
+var mesos = new Mesos(['http://mesosmaster01:5050']);
 
 db.serialize(function () {
   db.run("CREATE TABLE IF NOT EXISTS settings (marathon TEXT, registry TEXT, id INT)");
@@ -37,6 +37,7 @@ function getIp(req, res) {
     }
   });
 };
+
 
 app.get('/settings', function (req, res) {
   db.get("SELECT * FROM settings WHERE id='1'", function (err, row) {
@@ -203,31 +204,31 @@ app.get(config.DOCKERLOG, function getDockerLog(req, res) {
 // get running docker containers
 app.get(config.DOCKERLIST, function getDockerContainers(req, res) {
   console.log('Get all containers');
-	mesos.getAllSlaves(loopThroughDockerHosts); 
-	
-	function loopThroughDockerHosts(dockerHosts) {
-		var asyncTasks = [];
-		for (var i=0; i<dockerHosts.length; i++) {
-			(function(i) {
-				asyncTasks.push(
-					function(callback) {
-						req.pipe(request.get('http://'+ dockerHosts[i] + ':' + config.DOCKERPORT + config.DOCKERLIST,function getContent(err, response, body){
-						console.log(body);
-						callback(err,body);
-						}))
-					}
-				)
-			})(i);
-		}
+  mesos.getAllSlaves(loopThroughDockerHosts);
+
+  function loopThroughDockerHosts(dockerHosts) {
+    var asyncTasks = [];
+    for (var i = 0; i < dockerHosts.length; i++) {
+      (function (i) {
+        asyncTasks.push(
+          function (callback) {
+            req.pipe(request.get('http://' + dockerHosts[i] + ':' + config.DOCKERPORT + config.DOCKERLIST, function getContent(err, response, body) {
+              console.log(body);
+              callback(err, body);
+            }))
+          }
+        )
+      })(i);
+    }
     connectToDockerHosts(asyncTasks);
   };
 
   function connectToDockerHosts(asyncTasks) {
-  	async.parallel(asyncTasks,appendToResult);
-	};
-  
-	function appendToResult(err,results) {
-		 res.send(results);
+    async.parallel(asyncTasks, appendToResult);
+  };
+
+  function appendToResult(err, results) {
+    res.send(results);
   };
 
 });
@@ -235,17 +236,17 @@ app.get(config.DOCKERLIST, function getDockerContainers(req, res) {
 // get all mesos slaves
 app.get('/v1/getslaves', function getMesosSlaves(req, res) {
   console.log('Get all mesoslaves');
-	mesos.getAllSlaves(function logSlaves(body) {
+  mesos.getAllSlaves(function logSlaves(body) {
     res.send(body);
-	});	    
+  });
 });
 
 // debug function
 app.get('/debug', function getMesosSlaves(req, res) {
   console.log('Debug');
-	mesos.getActiveMesosMaster(function getMesosMaster(body) {
+  mesos.getActiveMesosMaster(function getMesosMaster(body) {
     res.send(body);
-	});	    
+  });
 });
 
 app.use(express.static(__dirname + '/public'));

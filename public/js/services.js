@@ -98,7 +98,8 @@ underscore.factory('_', function () {
   }, {
     query: {
       method: "GET",
-      isArray: true
+      isArray: true,
+      cache: true
     }
   });
 })

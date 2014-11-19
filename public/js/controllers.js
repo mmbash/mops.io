@@ -73,16 +73,26 @@ angular.module('mopsiApp.controllers', [])
   $scope.reponame = $stateParams.name;
   console.log('Tags ' + $stateParams.name);
 
-  $scope.tags = ReposTags.get({
-    name: $stateParams.name
-  });
-  $scope.deleteTag = function (tag, reponame) {
+  $scope.getTags = function () {
+    $scope.tags = ReposTags.get({
+      name: $stateParams.name
+    });
+  }
+  $scope.getTags();
+
+  $scope.deleteTag = function (tag, reponame, index) {
     if (popupService.showPopup('Really delete ' + reponame + ':' + tag + '?')) {
       TagDelete.get({
-        reponame: reponame,
-        tag: tag
-      });
-      $window.location.href = '';
+          reponame: reponame,
+          tag: tag
+        },
+        function (success) {
+          //      $window.location.href = '';
+          //$scope.getTags();
+          console.log('Delete Tag ' + tag);
+          $scope.getTags();
+          // $scope.tags.splice(tag, 1); funzt nicht
+        });
     }
   }
 })
@@ -114,16 +124,19 @@ angular.module('mopsiApp.controllers', [])
 .controller('AppsController', function ($scope, $stateParams, popupService, $window, Apps, $timeout, $interval, AppKill) {
 
   $scope.intervalApps = function () {
-    $timeout(function () {
-      Apps.get({
-        id: $stateParams.id
-      }, function (data) {
-        $scope.apps = data;
+    Apps.get({
+      id: $stateParams.id
+    }, function (data) {
+      $scope.appsChanged = data;
+      $timeout(function () {
         $scope.intervalApps();
       }, 5000);
     });
   }
   $scope.intervalApps();
+  $scope.$watch('appsChanged', function () {
+    $scope.apps = $scope.appsChanged;
+  }, true);
 
   $scope.appKill = function (name) {
     if (popupService.showPopup('Really kill ' + name + '?')) {

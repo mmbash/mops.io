@@ -24,6 +24,7 @@ db.serialize(function () {
   getIp();
 });
 
+
 function getIp(req, res) {
   db.get('SELECT * FROM settings', function (error, row) {
     if (error !== null) {
@@ -59,6 +60,7 @@ app.post('/settings', function (req, res) {
     getIp();
   });
 });
+
 
 // REPOS
 app.get('/v1/repos', function (req, res) {
@@ -226,31 +228,31 @@ app.get(config.DOCKERLOG, function getDockerLog(req, res) {
 // get running docker containers
 app.get(config.DOCKERLIST, function getDockerContainers(req, res) {
   console.log('Get all containers');
-	mesos.getAllSlaves(loopThroughDockerHosts); 
-	
-	function loopThroughDockerHosts(dockerHosts) {
-		var asyncTasks = [];
-		for (var i=0; i<dockerHosts.length; i++) {
-			(function(i) {
-				asyncTasks.push(
-					function(callback) {
-						req.pipe(request.get('http://'+ dockerHosts[i] + ':' + config.DOCKERPORT + config.DOCKERLIST,function getContent(err, response, body){
-						console.log(body);
-						callback(err,body);
-						}))
-					}
-				)
-			})(i);
-		}
+  mesos.getAllSlaves(loopThroughDockerHosts);
+
+  function loopThroughDockerHosts(dockerHosts) {
+    var asyncTasks = [];
+    for (var i = 0; i < dockerHosts.length; i++) {
+      (function (i) {
+        asyncTasks.push(
+          function (callback) {
+            req.pipe(request.get('http://' + dockerHosts[i] + ':' + config.DOCKERPORT + config.DOCKERLIST, function getContent(err, response, body) {
+              console.log(body);
+              callback(err, body);
+            }))
+          }
+        )
+      })(i);
+    }
     connectToDockerHosts(asyncTasks);
   };
 
   function connectToDockerHosts(asyncTasks) {
-  	async.parallel(asyncTasks,appendToResult);
-	};
-  
-	function appendToResult(err,results) {
-		 res.send(results);
+    async.parallel(asyncTasks, appendToResult);
+  };
+
+  function appendToResult(err, results) {
+    res.send(results);
   };
 
 });
@@ -258,9 +260,9 @@ app.get(config.DOCKERLIST, function getDockerContainers(req, res) {
 // get all mesos slaves
 app.get('/v1/getslaves', function getMesosSlaves(req, res) {
   console.log('Get all mesoslaves');
-	mesos.getAllSlaves(function logSlaves(body) {
+  mesos.getAllSlaves(function logSlaves(body) {
     res.send(body);
-	});	    
+  });
 });
 
 // debug function

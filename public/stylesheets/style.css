@@ -26,3 +26,21 @@ body {
 table .collapse.in {
   display: table-row;
 }
+.animate.ng-enter {
+  -webkit-animation: zoomIn 1s;
+  -moz-animation: zoomIn 1s;
+  -ms-animation: zoomIn 1s;
+  animation: zoomIn 1s;
+}
+.animate.ng-leave {
+  -webkit-animation: bounceOut 1s;
+  -moz-animation: bounceOut 1s;
+  -ms-animation: bounceOut 1s;
+  animation: bounceOut 1s;
+}
+.animate.ng-move {
+  -webkit-animation: bounceOut 1s;
+  -moz-animation: bounceOut 1s;
+  -ms-animation: bounceOut 1s;
+  animation: bounceOut 1s;
+}

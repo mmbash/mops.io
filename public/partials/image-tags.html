@@ -13,7 +13,7 @@
     <td>
       <a class="btn btn-primary" ui-sref="viewImageLayer({id:id})">Layer</a>
       <a class="btn btn-info" ui-sref="viewAppDeploy({tag:tag,reponame:reponame})">Deploy</a>
-      <a class="btn btn-danger" ng-click="deleteTag(tag,reponame)">Delete</a>
+      <a class="btn btn-danger" ng-click="deleteTag(tag,reponame,$index)">Delete</a>
     </td>
   </tr>
 </table>

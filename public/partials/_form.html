@@ -11,23 +11,23 @@
 <div class="form-group">
   <label for="image" class="col-sm-2 control-label">Image</label>
   <div class="col-sm-10">
-    <input type="radio" ng-model="app.container.docker.image" id="image" value="{{settings.registry}}{{form.reponame}}:{{form.tag}}" checked ng-true-value="{{settings.registry}}/{{form.reponame}}:{{form.tag}}" />{{settings.registry}}{{form.reponame}}:{{form.tag}}
+    <input type="radio" ng-model="app.container.docker.image" id="image" value="{{settings.registry|removeHTTP}}/{{form.reponame}}:{{form.tag}}" ng-true-value="{{settings.registry|removeHTTP}}/{{form.reponame}}:{{form.tag}}" />{{settings.registry|removeHTTP}}/{{form.reponame}}:{{form.tag}} Check the radio button!
   </div>
 </div>
 <div class="form-group">
   <label for="director" class="col-sm-2 control-label">Instances</label>
   <div class="col-sm-10">
-    <input type="number" ng-model="app.instances" min="0" max="3" integer class="form-control" id="instances" placeholder="1" />
+    <input type="number" ng-model="app.instances" min="0" max="10" integer class="form-control" id="instances" placeholder="1" />
     <span ng-show="form.size.$error.integer">The value is not a valid integer!</span>
     <span ng-show="form.size.$error.min || form.size.$error.max">
-      The value must be in range 0 to 3!</span>
+      The value must be in range 0 to 10!</span>
   </div>
 </div>
 
 <div class="form-group">
   <label for="plot" class="col-sm-2 control-label">Memory</label>
   <div class="col-sm-10">
-    <input type="number" ng-model="app.mem" class="form-control" id="memory" placeholder="256" />
+    <input type="number" ng-model="app.mem" class="form-control" id="memory" placeholder="128" />
   </div>
 </div>
 

@@ -41,3 +41,6 @@ exports.DOCKERPORT = '4243';
 exports.DOCKERLOG = '/containers/:id/logs';
 exports.DOCKERLIST = '/containers/json';
 exports.DOCKERLOGPART1 = '/containers/';
+
+//mesosphere stuff
+exports.LISTMESOSSLAVES = '/v1/getslaves';

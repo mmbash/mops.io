@@ -200,29 +200,37 @@ app.get(config.LISTEVENTSUBSCRIBER, function addEventSubscriber(req, res) {
 
 // get docker logs of a running app
 app.get(config.DOCKERLOG, function getDockerLog(req, res) {
-  console.log('Get logs of container: ' + req.params.id);
+  console.log('Get logs of an app: ' + req.params.id);
+  
+	var combinedStream = CombinedStream.create();
+  var asyncTasks= [];
+	
+	mesos.getAllContainersOfaApp(function getAllContainersOfApp(appArray) {
+		for (var i=0; i<appArray.length;i++) {
+			if (appArray[i].appName === req.params.id) {
+				(function(i) {
+				asyncTasks.push(
+					function(callback){
+						req.pipe(request.get({
+							url: 'http://' + appArray[i].dockerHost + ':4243' + config.DOCKERLOGPART1 + appArray[i].dockerId + '/logs',
+							qs: req.query
+						}, function (error, response, body) {
+							if (error) {
+								console.error('Connection error: ' + error.code);
+							}
+							console.log('hier');
+						})).pipe(res);
+				})
+			})(i)
+			} 	
+		}
+    connectToDockerHostsToLog(asyncTasks);
+	});	    
+    
+	function connectToDockerHostsToLog(asyncTasks) {
+		async.parallel(asyncTasks);
+  };
 
-  var combinedStream = CombinedStream.create();
-
-  combinedStream.append(req.pipe(request.get({
-    url: config.DOCKERHOST1 + config.DOCKERLOGPART1 + req.params.id + '/logs',
-    qs: req.query
-  }, function (error, response, body) {
-    if (error) {
-      console.error('Connection error: ' + error.code);
-    }
-  })))
-
-  combinedStream.append(req.pipe(request.get({
-    url: config.DOCKERHOST2 + config.DOCKERLOGPART1 + req.params.id + '/logs',
-    qs: req.query
-  }, function (error, response, body) {
-    if (error) {
-      console.error('Connection error: ' + error.code);
-    }
-  })))
-
-  combinedStream.pipe(res);
 });
 
 // get running docker containers

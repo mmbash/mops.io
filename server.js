@@ -16,7 +16,7 @@ var _ = require('underscore');
 var async = require('async');
 var docker = require('dockerode');
 var Mesos = require('./mesos.js');
-var mesos = new Mesos (['http://mesosmaster01:5050','http://mesosmaster02:5050']);
+var mesos = new Mesos(['http://192.168.1.180:5050']);
 
 db.serialize(function () {
   db.run("CREATE TABLE IF NOT EXISTS settings (marathon TEXT, registry TEXT, id INT)");
@@ -201,34 +201,34 @@ app.get(config.LISTEVENTSUBSCRIBER, function addEventSubscriber(req, res) {
 // get docker logs of a running app
 app.get(config.DOCKERLOG, function getDockerLog(req, res) {
   console.log('Get logs of an app: ' + req.params.id);
-  
-	var combinedStream = CombinedStream.create();
-  var asyncTasks= [];
-	
-	mesos.getAllContainersOfaApp(function getAllContainersOfApp(appArray) {
-		for (var i=0; i<appArray.length;i++) {
-			if (appArray[i].appName === req.params.id) {
-				(function(i) {
-				asyncTasks.push(
-					function(callback){
-						req.pipe(request.get({
-							url: 'http://' + appArray[i].dockerHost + ':4243' + config.DOCKERLOGPART1 + appArray[i].dockerId + '/logs',
-							qs: req.query
-						}, function (error, response, body) {
-							if (error) {
-								console.error('Connection error: ' + error.code);
-							}
-							console.log('hier');
-						})).pipe(res);
-				})
-			})(i)
-			} 	
-		}
+
+  var combinedStream = CombinedStream.create();
+  var asyncTasks = [];
+
+  mesos.getAllContainersOfaApp(function getAllContainersOfApp(appArray) {
+    for (var i = 0; i < appArray.length; i++) {
+      if (appArray[i].appName === req.params.id) {
+        (function (i) {
+          asyncTasks.push(
+            function (callback) {
+              req.pipe(request.get({
+                url: 'http://' + appArray[i].dockerHost + ':4243' + config.DOCKERLOGPART1 + appArray[i].dockerId + '/logs',
+                qs: req.query
+              }, function (error, response, body) {
+                if (error) {
+                  console.error('Connection error: ' + error.code);
+                }
+                console.log('hier');
+              })).pipe(res);
+            })
+        })(i)
+      }
+    }
     connectToDockerHostsToLog(asyncTasks);
-	});	    
-    
-	function connectToDockerHostsToLog(asyncTasks) {
-		async.parallel(asyncTasks);
+  });
+
+  function connectToDockerHostsToLog(asyncTasks) {
+    async.parallel(asyncTasks);
   };
 
 });
@@ -276,13 +276,13 @@ app.get('/v1/getslaves', function getMesosSlaves(req, res) {
 // debug function
 app.get('/debug', function getMesosSlaves(req, res) {
   console.log('Debug');
-	mesos.getAllContainersOfaApp(function getAllContainersOfApp(body) {
-		res.send(body);
-	});	    
+  mesos.getAllContainersOfaApp(function getAllContainersOfApp(body) {
+    res.send(body);
+  });
 });
 
 //callback for mesos
-app.post('/marathoncallback',function(req,res) {
+app.post('/marathoncallback', function (req, res) {
   console.log(req.body);
   console.log("\n");
   /*Send 200*/

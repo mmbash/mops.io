@@ -145,6 +145,16 @@ underscore.factory('_', function () {
     }
   });
 })
+  .factory('AppLogs', function ($resource) {
+    return $resource('/containers/:id/logs', {
+      id: 'id'
+    }, {
+      query: {
+        method: "GET",
+        isArray: true
+      }
+    });
+  })
 
 // AAAAAAAAAAAAAAAAAAAAAAAAAAAAALLLLLLLLLLLLLL
 

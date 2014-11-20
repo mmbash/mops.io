@@ -25,10 +25,6 @@
   </thead>
   <tbody>
     <tr dir-paginate="app in apps.apps |filter:search| itemsPerPage: pageSize">
-      <!--
-            <td><i class="glyphicon glyphicon-plus"></i>
-            </td>
--->
       <td>{{app.id}}</td>
       <td>{{app.tasksRunning}}/{{app.instances}}</td>
       <td>{{app.mem}}</td>
@@ -36,7 +32,6 @@
       <td>{{app.container.docker.image}}</td>
       <td>
         <a class="btn btn-primary" ui-sref="appDetails({id:app.id})">Details</a>
-        <a class="btn btn-info" ng-click="logs(app.id)">Container Logs</a>
         <a class="btn btn-danger" ng-click="appKill(app.id)">Kill!</a>
       </td>
     </tr>
@@ -44,23 +39,4 @@
   </tbody>
 </table>
 <dir-pagination-controls boundary-links="true" on-page-change="pageChangeHandler(newPageNumber)" template-url="partials/dirPagination.tpl.html" ]></dir-pagination-controls>
-<!--<p>
-  <button class="btn btn-default btn-sm" ng-click="status.open = !status.open">Toggle last panel</button>
-  <button class="btn btn-default btn-sm" ng-click="status.isFirstDisabled = ! status.isFirstDisabled">Enable / Disable first panel</button>
-</p>
 
-<label class="checkbox">
-  <input type="checkbox" ng-model="oneAtATime">Open only one at a time
-</label>
-<accordion close-others="oneAtATime">
-
-  <accordion-group is-open="status.open" heading="{{repo.name}}" ng-repeat="app in apps.apps">
-    <accordion-heading>
-      {{repo.name}} <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': status.open, 'glyphicon-chevron-right': !status.open}"></i>
-    </accordion-heading>
-    <ul>
-      <li>{{app.container.docker.image}}</li>
-      <li>{{app.cmd}}</li>
-      <li>{{app.env}}</li>
-  </accordion-group>
-</accordion>-->

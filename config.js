@@ -42,7 +42,7 @@ exports.MARATHONDELETEEVENTSUBSCRIBER = '/v2/eventSubscriptions';
 exports.MARATHONLISTEVENTSUBSCRIBER = '/v2/eventSubscriptions';
 
 // docker stuff
-exports.DOCKERHOSTARRAY = [ 'http://mesosmaster02:4243', 'http://mesosmaster01:4243' ];
+exports.DOCKERHOSTARRAY = ['http://mesosmaster02:4243', 'http://mesosmaster01:4243'];
 exports.DOCKERHOST1 = 'http://mesosmaster02:4243';
 exports.DOCKERHOST2 = 'http://mesosmaster02:4243';
 exports.DOCKERPORT = '4243';

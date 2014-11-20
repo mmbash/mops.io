@@ -121,7 +121,20 @@ angular.module('mopsiApp.controllers', [])
     $scope.loadSettings();
   })
 
-.controller('AppsController', function ($scope, $stateParams, popupService, $window, Apps, $timeout, $interval, AppKill) {
+.controller('AppsController', function ($scope, $stateParams, popupService, $window, Apps, $timeout, AppKill, AppLogs) {
+
+  $scope.logs = function (id) {
+    AppLogs.get({
+        id: id
+      },
+      function (data) {
+        console.log('AppLogs ' + id);
+
+      }, function (error) {
+        // failure
+        console.log('AppLogs Error ' + id);
+      });
+  }
 
   $scope.intervalApps = function () {
     Apps.get({
@@ -193,6 +206,6 @@ angular.module('mopsiApp.controllers', [])
   .controller('DebugController', function ($scope, $stateParams, Debug) {
 
     $scope.debug = Debug.get({
-      debug: $stateParams.details
+      app: $stateParams.app
     });
   })

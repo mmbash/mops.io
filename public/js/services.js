@@ -137,7 +137,16 @@ underscore.factory('_', function () {
   });
 })
 
-// AAAAAAAAAAAAAAAAAAAAAAAAAAAAALLLLLLLLLLLLLLLLLLT
+.factory('Debug', function ($resource) {
+  return $resource('/debug', {}, {
+    query: {
+      method: "GET",
+      isArray: true
+    }
+  });
+})
+
+// AAAAAAAAAAAAAAAAAAAAAAAAAAAAALLLLLLLLLLLLLL
 
 .service('popupService', function ($window) {
   this.showPopup = function (message) {

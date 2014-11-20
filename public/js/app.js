@@ -34,6 +34,10 @@ angular.module('mopsiApp').config(function ($stateProvider, $httpProvider) {
       url: '/apps',
       templateUrl: 'partials/apps.html',
       controller: 'AppsController'
+    }).state('debug', {
+      url: '/dockers',
+      templateUrl: 'partials/debug.html',
+      controller: 'DebugController'
     });
 
   $httpProvider.interceptors.push('timeoutHttpIntercept');

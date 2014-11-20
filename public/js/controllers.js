@@ -190,3 +190,9 @@ angular.module('mopsiApp.controllers', [])
     details: $stateParams.details
   });
 })
+  .controller('DebugController', function ($scope, $stateParams, Debug) {
+
+    $scope.debug = Debug.get({
+      debug: $stateParams.details
+    });
+  })

@@ -121,9 +121,31 @@ angular.module('mopsiApp.controllers', [])
     $scope.loadSettings();
   })
 
-.controller('AppsController', function ($scope, $stateParams, popupService, $window, Apps, $timeout, AppKill, AppLogs) {
+.controller('AppsController', function ($scope, $stateParams, popupService, $window, $log, Apps, $timeout, AppKill, $modal, dialogs, MyStreamingResource) {
 
-  $scope.logs = function (id) {
+  $scope.items = ['item1', 'item2', 'item3'];
+  $scope.openLog = function (id) {
+    var modalInstance = $modal.open({
+      templateUrl: 'modal-logs.html', //in apps.html als modal-logs.js included
+      controller: 'LogsController',
+      id: id,
+      resolve: {
+        id: function () {
+          console.log('LogsID: ' + id);
+          return id;
+        }
+      }
+    });
+
+    modalInstance.result.then(function (selectedItem) {
+      $scope.selected = selectedItem;
+    }, function () {
+      $log.info('Modal dismissed at: ' + new Date());
+    });
+  }
+
+
+  /*  $scope.logs = function (id) {
     AppLogs.get({
         id: id
       },
@@ -134,7 +156,7 @@ angular.module('mopsiApp.controllers', [])
         // failure
         console.log('AppLogs Error ' + id);
       });
-  }
+  }*/
 
   $scope.intervalApps = function () {
     Apps.get({
@@ -209,3 +231,34 @@ angular.module('mopsiApp.controllers', [])
       app: $stateParams.app
     });
   })
+
+.controller('LogsController', function ($scope, $stateParams, popupService, $window, MyStreamingResource, id) { //id injection von AppController
+
+  $scope.logs = MyStreamingResource.stream({
+      id: id //without the injection from above no id
+    },
+
+    // start callback
+    function (status, headers) {
+      console.log(headers);
+      console.log('Loggy ' + id + ' status');
+      // this.abort(); // could be called from here too
+    },
+    // node callback (where your data is going to be streamed to)
+    function (data) {
+      if (data !== null) {
+        console.log('Data ' + data);
+        console.dir(data);
+        $scope.containerlogs = data
+        //this.abort();
+      }
+    },
+    // done (if you really want to wait)
+    function (parsedJson) {
+      // ...
+    })
+
+  $scope.cancel = function () {
+    $modalInstance.dismiss('cancel');
+  };
+})

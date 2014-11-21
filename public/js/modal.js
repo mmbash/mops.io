@@ -4,11 +4,11 @@
         </div>
         <div class="modal-body">
             <ul>
-                <li ng-repeat="item in items">
-                    <a ng-click="selected.item = item">{{ item }}</a>
+                <li ng-repeat="log in logs">
+                    <a ng-click="selected.log = log">{{ log }}</a>
                 </li>
             </ul>
-            Selected: <b>{{ selected.item }} {{repo.name}} {{size}} {{item.size}} {{item.name}}</b>
+            Selected: <b>{{ selected.log }} {{repo.name}} {{size}} {{item.size}} {{item.name}}</b>
         </div>
         <div class="modal-footer">
             <button class="btn btn-primary" ng-click="ok()">OK</button>

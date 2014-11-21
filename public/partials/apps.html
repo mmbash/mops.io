@@ -36,7 +36,7 @@
       <td>{{app.container.docker.image}}</td>
       <td>
         <a class="btn btn-primary" ui-sref="appDetails({id:app.id})">Details</a>
-        <a class="btn btn-info" ng-click="logs(app.id)">Container Logs</a>
+        <a class="btn btn-info" ng-click="openLog(app.id)">Modal</a>
         <a class="btn btn-danger" ng-click="appKill(app.id)">Kill!</a>
       </td>
     </tr>
@@ -44,6 +44,8 @@
   </tbody>
 </table>
 <dir-pagination-controls boundary-links="true" on-page-change="pageChangeHandler(newPageNumber)" template-url="partials/dirPagination.tpl.html" ]></dir-pagination-controls>
+
+<div ng-include=" 'js/modal-logs.js' "></div>
 <!--<p>
   <button class="btn btn-default btn-sm" ng-click="status.open = !status.open">Toggle last panel</button>
   <button class="btn btn-default btn-sm" ng-click="status.isFirstDisabled = ! status.isFirstDisabled">Enable / Disable first panel</button>

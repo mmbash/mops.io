@@ -38,6 +38,10 @@ angular.module('mopsiApp').config(function ($stateProvider, $httpProvider) {
       url: '/dockers',
       templateUrl: 'partials/debug.html',
       controller: 'DebugController'
+    }).state('StreamingCtrl', {
+      url: '/stream/:id',
+      templateUrl: 'partials/debug.html',
+      controller: 'StreamingCtrl'
     });
 
   $httpProvider.interceptors.push('timeoutHttpIntercept');

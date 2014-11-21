@@ -145,6 +145,7 @@ underscore.factory('_', function () {
     }
   });
 })
+/*
   .factory('AppLogs', function ($resource) {
     return $resource('/containers/:id/logs', {
       id: 'id'
@@ -155,6 +156,23 @@ underscore.factory('_', function () {
       }
     });
   })
+*/
+
+.factory('MyStreamingResource',
+  function ($resource, $http) {
+    return {
+      stream: function (options, startFn, nodeFn, doneFn) {
+        //oboe('/test')
+        oboe('/containers' + options.id + '/logs')
+          .start(startFn)
+        // .node('foods.*', nodeFn)
+        .node('*.*', nodeFn)
+          .done(doneFn);
+      }
+    };
+  }
+)
+
 
 // AAAAAAAAAAAAAAAAAAAAAAAAAAAAALLLLLLLLLLLLLL
 

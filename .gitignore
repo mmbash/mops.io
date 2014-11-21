@@ -46,3 +46,4 @@ Temporary Items
 .apdisk
 /npm-debug.log
 *mopsidb*
+/sqlite/mopsidb1

@@ -212,7 +212,7 @@ app.get(config.DOCKERLOG, function getDockerLog(req, res) {
           asyncTasks.push(
             function (callback) {
               req.pipe(request.get({
-                url: 'http://' + appArray[i].dockerHost + ':4243' + config.DOCKERLOGPART1 + appArray[i].dockerId + '/logs',
+                url: 'http://' + appArray[i].dockerHost + ':4243' + config.DOCKERLOGPART1 + appArray[i].dockerId + '/logs?stderr=1&stdout=1&timestamps=1&follow=1&tail=10',
                 qs: req.query
               }, function (error, response, body) {
                 if (error) {

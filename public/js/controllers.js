@@ -123,6 +123,24 @@ angular.module('mopsiApp.controllers', [])
 
 .controller('AppsController', function ($scope, $stateParams, popupService, $window, $log, Apps, $timeout, AppKill, $modal, dialogs, MyStreamingResource) {
 
+  /*  function pailer(host, path, window_title) {
+    var url = '/containers' + $stateParams.id + '/logs';
+    var pailer =
+      window.open('partials/pailer.html', url, 'width=580px, height=700px');
+
+    // Need to use window.onload instead of document.ready to make
+    // sure the title doesn't get overwritten.
+    pailer.onload = function () {
+      pailer.document.title = window_title + ' (' + host + ')';
+    };
+  }
+  $scope.pail = pailer(
+
+    'bla',
+    '/master/log',
+    'Mesos Master');*/
+
+
   $scope.items = ['item1', 'item2', 'item3'];
   $scope.openLog = function (id) {
     var modalInstance = $modal.open({

@@ -16,7 +16,11 @@ var _ = require('underscore');
 var async = require('async');
 var docker = require('dockerode');
 var Mesos = require('./mesos.js');
-var mesos = new Mesos(['http://192.168.1.180:5050']);
+var mesos = new Mesos (['http://192.168.1.180:5050']);
+//var mesos = new Mesos (['http://10.141.141.10:5050']);
+var streamCleanser = require('docker-stream-cleanser');
+var raw = require('docker-raw-stream');
+
 
 db.serialize(function () {
   db.run("CREATE TABLE IF NOT EXISTS settings (marathon TEXT, registry TEXT, id INT)");
@@ -202,33 +206,33 @@ app.get(config.LISTEVENTSUBSCRIBER, function addEventSubscriber(req, res) {
 app.get(config.DOCKERLOG, function getDockerLog(req, res) {
   console.log('Get logs of an app: ' + req.params.id);
 
-  var combinedStream = CombinedStream.create();
-  var asyncTasks = [];
+	var combinedStream = CombinedStream.create();
+  var asyncTasks= [];
 
-  mesos.getAllContainersOfaApp(function getAllContainersOfApp(appArray) {
-    for (var i = 0; i < appArray.length; i++) {
-      if (appArray[i].appName === req.params.id) {
-        (function (i) {
-          asyncTasks.push(
-            function (callback) {
-              req.pipe(request.get({
-                url: 'http://' + appArray[i].dockerHost + ':4243' + config.DOCKERLOGPART1 + appArray[i].dockerId + '/logs?stderr=1&stdout=1&timestamps=1&follow=1&tail=10',
-                qs: req.query
-              }, function (error, response, body) {
-                if (error) {
-                  console.error('Connection error: ' + error.code);
-                }
-                console.log('hier');
-              })).pipe(res);
-            })
-        })(i)
-      }
-    }
+	mesos.getAllContainersOfaApp(function getAllContainersOfApp(appArray) {
+		for (var i=0; i<appArray.length;i++) {
+			if (appArray[i].appName === req.params.id) {
+				(function(i) {
+				asyncTasks.push(
+					function(callback){
+						req.pipe(request.get({
+							url: 'http://' + appArray[i].dockerHost + ':4243' + config.DOCKERLOGPART1 + appArray[i].dockerId + '/logs?stderr=1&stdout=1&tail=10',
+							qs: req.query
+						}, function (error, response, body) {
+							if (error) {
+								console.error('Connection error: ' + error.code);
+							}
+							console.log('hier');
+						})).pipe(res);
+				})
+			})(i)
+			}
+		}
     connectToDockerHostsToLog(asyncTasks);
-  });
+	});
 
-  function connectToDockerHostsToLog(asyncTasks) {
-    async.parallel(asyncTasks);
+	function connectToDockerHostsToLog(asyncTasks) {
+		async.parallel(asyncTasks);
   };
 
 });
@@ -276,13 +280,13 @@ app.get('/v1/getslaves', function getMesosSlaves(req, res) {
 // debug function
 app.get('/debug', function getMesosSlaves(req, res) {
   console.log('Debug');
-  mesos.getAllContainersOfaApp(function getAllContainersOfApp(body) {
-    res.send(body);
-  });
+	mesos.getAllContainersOfaApp(function getAllContainersOfApp(body) {
+		res.send(body);
+	});
 });
 
 //callback for mesos
-app.post('/marathoncallback', function (req, res) {
+app.post('/marathoncallback',function(req,res) {
   console.log(req.body);
   console.log("\n");
   /*Send 200*/
@@ -295,6 +299,69 @@ process.on('uncaughtException', function (err) {
   console.error(err.stack);
   process.exit(1);
 });
+
+// streamtest
+app.get('/streamtest/:id/logs', function getDockerLog(req, res) {
+  console.log('Get logs of an app: ' + req.params.id);
+
+  var combinedStream = CombinedStream.create();
+  var asyncTasks = [];
+
+// forward the output to stdio
+  var decode = raw.decode({halfOpen:true});
+decode.stdout.pipe(res);
+decode.stderr.pipe(res);
+
+
+  mesos.getAllContainersOfaApp(function getAllContainersOfApp(appArray) {
+
+    for (var i = 0; i < appArray.length; i++) {
+      if (appArray[i].appName === req.params.id) {
+        (function (i) {
+          asyncTasks.push(
+            function (callback) {
+              req.pipe(request.get({
+                url: 'http://' + appArray[i].dockerHost + ':4243' + config.DOCKERLOGPART1 + appArray[i].dockerId + '/logs?stderr=1&stdout=1&tail=10',
+                qs: req.query
+              }, function (error, response, body) {
+                if (error) {
+                  console.error('Connection error: ' + error.code);
+                } if (response){
+                  console.log('Response: ' + response);
+                  //var res3 = streamCleanser(response, 'hex');
+                  //console.log('Response2: ' + res3);
+                }if (body) {
+                console.log('Body: ' + body);
+                }
+
+              })).pipe(decode)
+            })
+        })(i)
+      }
+    }
+    connectToDockerHostsToLog(asyncTasks);
+  });
+
+
+  function connectToDockerHostsToLog(asyncTasks) {
+    async.parallel(asyncTasks);
+  };
+});
+
+// boag
+
+app.get('/fuit', function (req, res) {
+
+// forward the output to stdio
+decode.stdout.pipe(res);
+decode.stderr.pipe(process.stderr);
+
+
+  console.log('Get fuck');
+  url= 'http://192.168.1.180:4243/containers/dec8ad75eb5b/logs?stderr=1&stdout=1&timestamps=1&tail=10&stream=1'
+  request.get(url).pipe(decode);
+});
+
 
 app.use(express.static(__dirname + '/public'));
 

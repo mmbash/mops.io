@@ -121,30 +121,14 @@ angular.module('mopsiApp.controllers', [])
     $scope.loadSettings();
   })
 
-.controller('AppsController', function ($scope, $stateParams, popupService, $window, $log, Apps, $timeout, AppKill, $modal, dialogs, MyStreamingResource) {
-
-  /*  function pailer(host, path, window_title) {
-    var url = '/containers' + $stateParams.id + '/logs';
-    var pailer =
-      window.open('partials/pailer.html', url, 'width=580px, height=700px');
-
-    // Need to use window.onload instead of document.ready to make
-    // sure the title doesn't get overwritten.
-    pailer.onload = function () {
-      pailer.document.title = window_title + ' (' + host + ')';
-    };
-  }
-  $scope.pail = pailer(
-
-    'bla',
-    '/master/log',
-    'Mesos Master');*/
-
+.controller('AppsController', function ($scope, $stateParams, popupService, $window, $log, Apps, $timeout, AppKill, $modal, dialogs, MyStreamingResource, AppLogs, StreamService) {
 
   $scope.items = ['item1', 'item2', 'item3'];
+
   $scope.openLog = function (id) {
     var modalInstance = $modal.open({
-      templateUrl: 'modal-logs.html', //in apps.html als modal-logs.js included
+      templateUrl: 'modal-logs.html', // in apps.html als modal - logs.js included
+
       controller: 'LogsController',
       id: id,
       resolve: {
@@ -161,20 +145,6 @@ angular.module('mopsiApp.controllers', [])
       $log.info('Modal dismissed at: ' + new Date());
     });
   }
-
-
-  /*  $scope.logs = function (id) {
-    AppLogs.get({
-        id: id
-      },
-      function (data) {
-        console.log('AppLogs ' + id);
-
-      }, function (error) {
-        // failure
-        console.log('AppLogs Error ' + id);
-      });
-  }*/
 
   $scope.intervalApps = function () {
     Apps.get({
@@ -250,31 +220,29 @@ angular.module('mopsiApp.controllers', [])
     });
   })
 
-.controller('LogsController', function ($scope, $stateParams, popupService, $window, MyStreamingResource, id) { //id injection von AppController
+.controller('LogsController', function ($scope, $stateParams, $timeout,popupService, $window, id, AppLogs) { //id injection von AppController
 
-  $scope.logs = MyStreamingResource.stream({
-      id: id //without the injection from above no id
-    },
+  $scope.id = id;
+  id = id.slice(1); //remove "/" from app
 
-    // start callback
-    function (status, headers) {
-      console.log(headers);
-      console.log('Loggy ' + id + ' status');
-      // this.abort(); // could be called from here too
-    },
-    // node callback (where your data is going to be streamed to)
-    function (data) {
-      if (data !== null) {
-        console.log('Data ' + data);
-        console.dir(data);
-        $scope.containerlogs = data
-        //this.abort();
-      }
-    },
-    // done (if you really want to wait)
-    function (parsedJson) {
-      // ...
-    })
+    $scope.intervalLogs = function () {
+
+    AppLogs.getApplogs({
+      id : id
+    }).success(function(data){
+      console.log('LogData' + data);
+      $scope.logsChanged = data;
+      $timeout(function () {
+        $scope.intervalLogs();
+      }, 5000);
+    });
+  }
+
+  $scope.intervalLogs();
+  $scope.$watch('logsChanged', function () {
+    $scope.logs = $scope.logsChanged;
+  }, true);
+
 
   $scope.cancel = function () {
     $modalInstance.dismiss('cancel');

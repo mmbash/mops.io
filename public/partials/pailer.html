@@ -24,9 +24,9 @@
   <pre id="data"></pre>
   <div class="indicator" id="indicator"></div>
 
-  <script src="/static/js/jquery-1.7.1.min.js"></script>
-  <script src="/public/lib/underscore-min.js"></script>
-  <script src="/public/lib/jquery.pailer.js"></script>
+  <script src="../lib/jquery-1.7.1.min.js"></script>
+  <script src="../lib/underscore-min.js"></script>
+  <script src="../lib/jquery.pailer.js"></script>
 
   <script>
     var $body = $('body');
@@ -52,7 +52,7 @@
             'offset': -1,
             'length': -1
           }, options);
-          var url = window.name + '&offset=' + settings.offset + '&length=' + settings.length + '&jsonp=?';
+          var url = window.name + '';
           return $.getJSON(url);
         },
         'indicator': $('#indicator')

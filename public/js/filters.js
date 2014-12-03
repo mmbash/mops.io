@@ -4,4 +4,10 @@ angular.module('mopsiApp.filters', [])
   return function (url) {
     return url.replace(/^https?:\/\//, '');
   };
+})
+.filter('addbr', function () {
+  return function (logs) {
+return logs.split(/\n/);
+//return logs.replace(/(?:\r\n|\r|\n)/g, '<br>');
+  };
 });

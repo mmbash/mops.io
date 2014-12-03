@@ -103,7 +103,6 @@ Mesos.prototype.getAllContainersOfaApp = function (callback) {
   function inspectAllDockerContainers(dockerContainerOnHostMap) {
     var appMapDockerContainerMap = [];
     var asyncTasks = [];
-
     for (var i = 0; i < dockerContainerOnHostMap.length; i++) {
       (function (i) {
         asyncTasks.push(
@@ -112,13 +111,16 @@ Mesos.prototype.getAllContainersOfaApp = function (callback) {
               try {
                 data = JSON.parse(body);
                 var mesosMount = '';
+                again:
                 for (var i = 0; i < data.Config.Env.length; i++) {
                   var res = data.Config.Env[i].split('=');
+                  console.log('RES= ' +res);
                   if (res[0] === 'MESOS_SANDBOX') {
                     mesosMount = res[1];
                   }
                 }
                 var appName = data.Volumes[mesosMount].split('executors')[1].split('.')[0].substring(1);
+                                  console.log('appName= ' +appName+ ' dockerhost: '+response.request.uri.hostname+' dockerid: '+data.Id);
                 var appMapDockerContainer = {
                   appName: appName,
                   dockerHost: response.request.uri.hostname,

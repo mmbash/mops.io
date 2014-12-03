@@ -145,18 +145,17 @@ underscore.factory('_', function () {
     }
   });
 })
-/*
-  .factory('AppLogs', function ($resource) {
-    return $resource('/containers/:id/logs', {
-      id: 'id'
-    }, {
-      query: {
-        method: "GET",
-        isArray: true
-      }
-    });
-  })
-*/
+
+.factory('AppLogs', function ($http) {
+return{
+    getApplogs : function(options) {
+        return $http({
+            url: '/streamtest/'+ options.id +'/logs',
+            method: 'GET'
+        })
+    }
+ }
+})
 
 .factory('MyStreamingResource',
   function ($resource, $http) {
@@ -166,13 +165,42 @@ underscore.factory('_', function () {
         oboe('/containers' + options.id + '/logs')
           .start(startFn)
         // .node('foods.*', nodeFn)
-        .node('*.*', nodeFn)
+        .node('app.*', nodeFn)
           .done(doneFn);
       }
     };
   }
 )
 
+.factory('StreamService', function ($http) {
+  return {
+    stream: function (urlToStream, modelToAppend, countProperty, dataProperty, pageSizeProperty) {
+
+      var promise = $http.get(urlToStream).then(function (response) {
+
+        var count = response.data[countProperty];
+        var pageSize = response.data[pageSizeProperty];
+
+        for (var i = 0; i < pageSize; i++) {
+          var pageData = response.data[dataProperty];
+          modelToAppend.push(pageData[i]);
+        }
+
+        for (var j = 1; j < count / pageSize; j++) {
+          $http.get(urlToStream + j).then(function (inner) {
+            for (var k = 0; k < pageSize; k++) {
+              {
+                var innerPageData = inner.data[dataProperty];
+                modelToAppend.push(innerPageData[k]);
+              }
+            }
+          });
+        }
+      });
+      return promise;
+    }
+  };
+})
 
 // AAAAAAAAAAAAAAAAAAAAAAAAAAAAALLLLLLLLLLLLLL
 

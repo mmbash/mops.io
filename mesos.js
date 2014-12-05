@@ -137,7 +137,7 @@ Mesos.prototype.getAllContainersOfaApp = function (callback) {
                     }
                   }
                 }
-                console.log('No Mesos');
+                console.log('No Mesos bzw. loop ends');
               } catch (e) {
                 console.log(e);
               }
@@ -152,10 +152,12 @@ Mesos.prototype.getAllContainersOfaApp = function (callback) {
 
   function getDockerMapContainerArray(asyncTasks) {
     async.parallel(asyncTasks, appendToDockerMapResult);
+    console.log('Hier die Map');
   };
 
   function appendToDockerMapResult(err, results) {
     callback(results);
+    console.log('Hier append');
   }
 }
 

@@ -123,12 +123,9 @@ angular.module('mopsiApp.controllers', [])
 
 .controller('AppsController', function ($scope, $stateParams, popupService, $window, $log, Apps, $timeout, AppKill, $modal, dialogs, MyStreamingResource, AppLogs, StreamService) {
 
-  $scope.items = ['item1', 'item2', 'item3'];
-
   $scope.openLog = function (id) {
     var modalInstance = $modal.open({
       templateUrl: 'modal-logs.html', // in apps.html als modal - logs.js included
-
       controller: 'LogsController',
       id: id,
       resolve: {
@@ -140,9 +137,10 @@ angular.module('mopsiApp.controllers', [])
     });
 
     modalInstance.result.then(function (selectedItem) {
-      $scope.selected = selectedItem;
+      $log.info('Log Modal open ');
     }, function () {
-      $log.info('Modal dismissed at: ' + new Date());
+      $log.info('Log Modal dismissed at: ' + new Date());
+      $timeout.cancel(timer);
     });
   }
 
@@ -220,31 +218,41 @@ angular.module('mopsiApp.controllers', [])
     });
   })
 
-.controller('LogsController', function ($scope, $stateParams, $timeout,popupService, $window, id, AppLogs) { //id injection von AppController
+.controller('LogsController', function ($scope, $stateParams,$modalInstance, $timeout,popupService, $window, id, AppLogs) { //id injection von AppController
 
   $scope.id = id;
   id = id.slice(1); //remove "/" from app
 
-    $scope.intervalLogs = function () {
+
+
+/*    var timer= $timeout(function () {
+        $scope.intervalLogs();
+      }, 5000); */
+      $scope.intervalLogs = function () {
 
     AppLogs.getApplogs({
       id : id
     }).success(function(data){
       console.log('LogData' + data);
       $scope.logsChanged = data;
-      $timeout(function () {
+      timer=$timeout(function () {
         $scope.intervalLogs();
       }, 5000);
     });
   }
-
   $scope.intervalLogs();
+
+  $scope.$on('intervalLogs', function(){
+    $timeout.cancel(timer);
+});
+
   $scope.$watch('logsChanged', function () {
     $scope.logs = $scope.logsChanged;
   }, true);
 
-
   $scope.cancel = function () {
     $modalInstance.dismiss('cancel');
+    console.log('ich?' );
+    $timeout.cancel(timer);
   };
 })

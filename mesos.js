@@ -111,22 +111,33 @@ Mesos.prototype.getAllContainersOfaApp = function (callback) {
               try {
                 data = JSON.parse(body);
                 var mesosMount = '';
-                again:
-                for (var i = 0; i < data.Config.Env.length; i++) {
-                  var res = data.Config.Env[i].split('=');
-                  console.log('RES= ' +res);
-                  if (res[0] === 'MESOS_SANDBOX') {
-                    mesosMount = res[1];
+
+                var name = data.Name;
+                console.log('Name: ' + name);
+                if (name.indexOf('mesos') != -1) { // is it  a mesos container?
+
+                  console.log('Yes Mesos');
+
+                  for (var i = 0; i < data.Config.Env.length; i++) {
+
+                    var res = data.Config.Env[i].split('=');
+                    console.log('RES= ' + res);
+                    if (res[0] === 'MESOS_SANDBOX') {
+                      mesosMount = res[1];
+                      var appName = data.Volumes[mesosMount].split('executors')[1].split('.')[0].substring(1);
+                      console.log('appName= ' + appName + ' dockerhost: ' + response.request.uri.hostname + ' dockerid: ' + data.Id);
+                      var appMapDockerContainer = {
+                        appName: appName,
+                        dockerHost: response.request.uri.hostname,
+                        dockerId: data.Id
+                      }
+                      callback(err, appMapDockerContainer);
+                      console.log('Mehr brauch ich nicht'); //found Env MESOS_SANDBOX in this cycle
+                      break;
+                    }
                   }
                 }
-                var appName = data.Volumes[mesosMount].split('executors')[1].split('.')[0].substring(1);
-                                  console.log('appName= ' +appName+ ' dockerhost: '+response.request.uri.hostname+' dockerid: '+data.Id);
-                var appMapDockerContainer = {
-                  appName: appName,
-                  dockerHost: response.request.uri.hostname,
-                  dockerId: data.Id
-                }
-                callback(err, appMapDockerContainer);
+                console.log('No Mesos');
               } catch (e) {
                 console.log(e);
               }
@@ -137,6 +148,7 @@ Mesos.prototype.getAllContainersOfaApp = function (callback) {
     }
     getDockerMapContainerArray(asyncTasks);
   }
+
 
   function getDockerMapContainerArray(asyncTasks) {
     async.parallel(asyncTasks, appendToDockerMapResult);

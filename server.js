@@ -10,24 +10,21 @@ var request = require('request');
 var config = require('./config.js');
 var sqlite3 = require('sqlite3').verbose();
 var db = new sqlite3.Database('./sqlite/mopsidb1');
-var registryip = getIp();
-var marathonip = getIp();
+var getIPs = getIp();
+// var marathonip = getIp();
 var _ = require('underscore');
 var async = require('async');
 var docker = require('dockerode');
 var Mesos = require('./mesos.js');
 var mesos = new Mesos (['http://192.168.1.180:5050']);
 //var mesos = new Mesos (['http://10.141.141.10:5050']);
-var streamCleanser = require('docker-stream-cleanser');
 var raw = require('docker-raw-stream');
 
-
 db.serialize(function () {
-  db.run("CREATE TABLE IF NOT EXISTS settings (marathon TEXT, registry TEXT, id INT)");
-  db.run("REPLACE INTO settings (marathon, registry, id) VALUES('http://192.168.1.180:8080','http://192.168.1.188:5000','1')");
+  db.run("CREATE TABLE IF NOT EXISTS settings (marathon TEXT, registry TEXT, mesos TEXT,id INT)");
+  db.run("REPLACE INTO settings (marathon, registry, mesos, id) VALUES('http://192.168.1.180:8080','http://192.168.1.188:5000','http://192.168.1.180:5050','1')");
   getIp();
 });
-
 
 function getIp(req, res) {
   db.get('SELECT * FROM settings', function (error, row) {
@@ -36,9 +33,10 @@ function getIp(req, res) {
     } else {
       registryip = row.registry;
       marathonip = row.marathon;
+      mesosip  = row.mesos;
 
       console.log(row);
-      console.log('IPs:' + registryip + ' ' + marathonip);
+      console.log('IPs:' + registryip + ' ' + marathonip+ ' ' + mesosip);
     }
   });
 };
@@ -64,7 +62,6 @@ app.post('/settings', function (req, res) {
     getIp();
   });
 });
-
 
 // REPOS
 app.get('/v1/repos', function (req, res) {
@@ -310,8 +307,7 @@ app.get('/streamtest/:id/logs', function getDockerLog(req, res) {
 // forward the output to stdio
   var decode = raw.decode({halfOpen:true});
 decode.stdout.pipe(res);
-decode.stderr.pipe(res);
-
+//decode.stderr.pipe(res);
 
   mesos.getAllContainersOfaApp(function getAllContainersOfApp(appArray) {
 
@@ -328,8 +324,7 @@ decode.stderr.pipe(res);
                   console.error('Connection error: ' + error.code);
                 } if (response){
                   console.log('Response: ' + response);
-                  //var res3 = streamCleanser(response, 'hex');
-                  //console.log('Response2: ' + res3);
+
                 }if (body) {
                 console.log('Body: ' + body);
                 }
@@ -356,12 +351,10 @@ app.get('/fuit', function (req, res) {
 decode.stdout.pipe(res);
 decode.stderr.pipe(process.stderr);
 
-
   console.log('Get fuck');
   url= 'http://192.168.1.180:4243/containers/dec8ad75eb5b/logs?stderr=1&stdout=1&timestamps=1&tail=10&stream=1'
   request.get(url).pipe(decode);
 });
-
 
 app.use(express.static(__dirname + '/public'));
 

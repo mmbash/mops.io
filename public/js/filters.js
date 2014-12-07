@@ -5,9 +5,15 @@ angular.module('mopsiApp.filters', [])
     return url.replace(/^https?:\/\//, '');
   };
 })
-.filter('addbr', function () {
-  return function (logs) {
-return logs.split(/\n/);
-//return logs.replace(/(?:\r\n|\r|\n)/g, '<br>');
-  };
-});
+  .filter('addbr', function () {
+    return function (logs) {
+      return logs.split(/\n/);
+      //return logs.replace(/(?:\r\n|\r|\n)/g, '<br>');
+    };
+  })
+  .filter('splitC', function () {
+    return function (logs) {
+      return logs.split(/,/);
+      //return logs.replace(/(?:\r\n|\r|\n)/g, '<br>');
+    };
+  });

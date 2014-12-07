@@ -18,9 +18,35 @@
     <td>{{details.created}}</td>
   </tr>
   <tr>
-    <td>Container Config</td>
-    <td>{{details.container_config}}</td>
+    <td>CMD</td>
+    <td>{{details.container_config.Cmd}}</td>
   </tr>
+  <tr>
+    <td>Exposed Ports</td>
+    <td>{{details.container_config.ExposedPorts}}</td>
+  </tr>
+  <tr>
+    <td>Environment Vars</td>
+    <td>{{details.container_config.Env}}</td>
+  </tr>
+  <tr>
+    <td>Volumes</td>
+    <td>{{details.container_config.Volumes}}</td>
+  </tr>
+  <tr>
+    <td>WorkingDir</td>
+    <td>{{details.container_config.WorkingDir}}</td>
+  </tr>
+  <tr>
+    <td>Security Options</td>
+    <td>{{details.container_config.SecurityOpt}}</td>
+  </tr>
+
+  <!-- <tr>
+    <td>All</td>
+    <td>{{details.container_config}}</td>
+  </tr>-->
+
 </table>
 <!--<div>
   <a class="btn btn-primary" ui-sref="editLayer({id:layer.id})">Edit</a>

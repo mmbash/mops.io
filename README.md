@@ -10,7 +10,7 @@ The master branch is the development branch so you should use the latest release
 ### Start with node-easy
 
 ```bash
-docker run -it -e "APP_NAME=server.js" -e "GIT=https://github.com/mmbash/mops.io" -e "GIT_TAG=v0.6.2" -p 3000:3000 mikemichel/node-easy /bin/sh /tmp/gitmon.sh
+docker run -it -e "APP_NAME=server.js" -e "GIT=https://github.com/mmbash/mops.io.git" -e "GIT_TAG=v0.6.2" -p 3000:3000 mikemichel/node-easy /bin/sh /tmp/gitmon.sh
 ```
 
 [node-easy](https://registry.hub.docker.com/u/mikemichel/node-easy/) can clone git repos, does a npm install and starts server.js with nodemon
